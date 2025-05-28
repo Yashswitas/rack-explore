@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { X, Share, Heart } from 'lucide-react';
+import { X, Share, Heart, ShoppingBag } from 'lucide-react';
 import { SavedItem } from '../pages/Index';
 
 interface ImageCarouselProps {
@@ -33,19 +33,19 @@ const sampleImages = [
 
 const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
-  const [showBuyButton, setShowBuyButton] = useState<string | null>(null);
 
   const handleSave = (item: SavedItem) => {
     onSaveItem(item);
-    setExpandedImage(null);
+    console.log('Item saved:', item);
   };
 
   const handleBuy = () => {
+    console.log('Buy button clicked');
     alert('Opening in browser..');
   };
 
   const handleShare = () => {
-    // Share functionality
+    console.log('Share button clicked');
     alert('Share functionality');
   };
 
@@ -71,21 +71,16 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
         </div>
         
         <div className="bg-white p-6">
-          <div 
-            className="mb-4 cursor-pointer"
-            onMouseEnter={() => setShowBuyButton(item.id)}
-            onMouseLeave={() => setShowBuyButton(null)}
-          >
+          <div className="mb-4">
             <h3 className="font-semibold text-lg text-black">{item.name}</h3>
             <p className="text-gray-600">{item.company}</p>
-            {showBuyButton === item.id && (
-              <button 
-                onClick={handleBuy}
-                className="mt-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium animate-fade-in"
-              >
-                Buy Now
-              </button>
-            )}
+            <button 
+              onClick={handleBuy}
+              className="mt-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2"
+            >
+              <ShoppingBag className="w-4 h-4" />
+              Buy Now
+            </button>
           </div>
           
           <div className="flex gap-4">
@@ -119,25 +114,43 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
             className="w-full h-full object-cover rounded-lg cursor-pointer"
             onClick={() => setExpandedImage(item.id)}
           />
-          <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-3">
-            <div 
-              className="cursor-pointer"
-              onMouseEnter={() => setShowBuyButton(item.id)}
-              onMouseLeave={() => setShowBuyButton(null)}
+          
+          {/* Action buttons overlay */}
+          <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-80 group-hover:opacity-100 transition-opacity">
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                handleShare();
+              }}
+              className="bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-colors"
             >
+              <Share className="w-4 h-4 text-black" />
+            </button>
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSave(item);
+              }}
+              className="bg-primary p-2 rounded-full shadow-lg hover:bg-primary/90 transition-colors"
+            >
+              <Heart className="w-4 h-4 text-white" />
+            </button>
+          </div>
+          
+          <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-3">
+            <div className="cursor-pointer" onClick={() => setExpandedImage(item.id)}>
               <h3 className="font-medium text-black">{item.name}</h3>
               <p className="text-sm text-gray-600">{item.company}</p>
-              {showBuyButton === item.id && (
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleBuy();
-                  }}
-                  className="mt-2 bg-primary text-white px-3 py-1 rounded text-xs font-medium animate-fade-in"
-                >
-                  Buy Now
-                </button>
-              )}
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleBuy();
+                }}
+                className="mt-2 bg-primary text-white px-3 py-1 rounded text-xs font-medium flex items-center gap-1 hover:bg-primary/90 transition-colors"
+              >
+                <ShoppingBag className="w-3 h-3" />
+                Buy Now
+              </button>
             </div>
           </div>
         </div>
