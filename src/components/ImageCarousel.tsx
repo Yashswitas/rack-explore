@@ -120,8 +120,8 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
 
   return (
     <div className="h-full">
-      <div className="overflow-x-auto scrollbar-hide">
-        <div className="flex gap-4 p-4" style={{ width: `${sampleImages.length * 280}px` }}>
+      <div className="overflow-x-scroll overflow-y-hidden">
+        <div className="flex gap-4 p-4 w-max">
           {sampleImages.map((item) => (
             <div key={item.id} className="flex-none w-64 h-full relative group">
               <img 
@@ -131,14 +131,14 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
                 onClick={() => setExpandedImage(item.id)}
               />
               
-              {/* Action buttons overlay - more visible */}
-              <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-90 group-hover:opacity-100 transition-opacity">
+              {/* Floating action buttons */}
+              <div className="absolute top-2 right-2 flex flex-col gap-2">
                 <button 
                   onClick={(e) => {
                     e.stopPropagation();
                     handleShare();
                   }}
-                  className="bg-white/95 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-colors border border-gray-200"
+                  className="bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-colors"
                 >
                   <Share className="w-4 h-4 text-black" />
                 </button>
@@ -153,21 +153,10 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
                 </button>
               </div>
               
-              <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-sm rounded-lg p-3 border border-gray-200">
-                <div className="cursor-pointer" onClick={() => setExpandedImage(item.id)}>
-                  <h3 className="font-medium text-black">{item.name}</h3>
-                  <p className="text-sm text-gray-600">{item.company}</p>
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleBuy();
-                    }}
-                    className="mt-2 bg-primary text-white px-3 py-1 rounded text-xs font-medium flex items-center gap-1 hover:bg-primary/90 transition-colors"
-                  >
-                    <ShoppingBag className="w-3 h-3" />
-                    Buy Now
-                  </button>
-                </div>
+              {/* Simple title overlay at bottom */}
+              <div className="absolute bottom-2 left-2 right-2 bg-black/70 backdrop-blur-sm rounded-lg p-2">
+                <h3 className="font-medium text-white text-sm">{item.name}</h3>
+                <p className="text-white/80 text-xs">{item.company}</p>
               </div>
             </div>
           ))}
