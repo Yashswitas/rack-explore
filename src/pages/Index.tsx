@@ -27,7 +27,7 @@ const Index = () => {
     <div className="min-h-screen bg-white flex flex-col">
       <Header />
       
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden pb-20">
         {activeTab === 'explore' && (
           <ExploreTab onSaveItem={handleSaveItem} />
         )}
@@ -36,11 +36,13 @@ const Index = () => {
         )}
       </div>
 
-      <BottomNavigation 
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        onAddClick={() => setShowAddOverlay(true)}
-      />
+      <div className="fixed bottom-0 left-0 right-0 z-50">
+        <BottomNavigation 
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          onAddClick={() => setShowAddOverlay(true)}
+        />
+      </div>
 
       {showAddOverlay && (
         <AddItemOverlay 

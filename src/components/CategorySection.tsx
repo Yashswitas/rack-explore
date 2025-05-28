@@ -52,20 +52,20 @@ const categories = [
 
 const CategorySection = () => {
   return (
-    <div className="p-6 space-y-8">
+    <div className="p-4 space-y-6">
       {categories.map((category) => (
         <div key={category.name}>
-          <h3 className="text-lg font-semibold mb-4 text-black">{category.name}</h3>
-          <div className="flex gap-4 overflow-x-auto pb-2">
+          <h3 className="text-base font-semibold mb-3 text-black">{category.name}</h3>
+          <div className="flex gap-3 overflow-x-auto pb-2">
             {category.items.map((item, index) => (
-              <div key={index} className="flex-none w-40">
+              <div key={index} className="flex-none w-24">
                 <img 
                   src={item.image} 
                   alt={item.name}
-                  className="w-full h-48 object-cover rounded-lg mb-2"
+                  className="w-full h-28 object-cover rounded-lg mb-1"
                 />
-                <h4 className="font-medium text-sm text-black truncate">{item.name}</h4>
-                <p className="text-xs text-gray-600">{item.brand}</p>
+                <h4 className="font-medium text-xs text-black truncate">{item.name}</h4>
+                <p className="text-xs text-gray-600 truncate">{item.brand}</p>
               </div>
             ))}
           </div>
