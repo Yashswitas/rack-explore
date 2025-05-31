@@ -27,7 +27,7 @@ const Index = () => {
     <div className="min-h-screen bg-white flex flex-col">
       <Header />
       
-      <div className="flex-1 overflow-hidden pb-20">
+      <div className="flex-1 overflow-hidden pb-16">
         {activeTab === 'explore' && (
           <ExploreTab onSaveItem={handleSaveItem} />
         )}

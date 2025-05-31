@@ -9,10 +9,10 @@ interface BottomNavigationProps {
 
 const BottomNavigation = ({ activeTab, onTabChange, onAddClick }: BottomNavigationProps) => {
   return (
-    <div className="bg-white border-t border-gray-200 flex items-center relative">
+    <div className="bg-white border-t border-gray-200 flex items-center relative py-2">
       <button 
         onClick={() => onTabChange('explore')}
-        className={`flex-1 py-4 text-center font-medium ${
+        className={`flex-1 py-3 text-center font-medium ${
           activeTab === 'explore' ? 'text-primary' : 'text-gray-600'
         }`}
       >
@@ -30,7 +30,7 @@ const BottomNavigation = ({ activeTab, onTabChange, onAddClick }: BottomNavigati
       
       <button 
         onClick={() => onTabChange('rack')}
-        className={`flex-1 py-4 text-center font-medium ${
+        className={`flex-1 py-3 text-center font-medium ${
           activeTab === 'rack' ? 'text-primary' : 'text-gray-600'
         }`}
       >

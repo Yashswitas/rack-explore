@@ -12,35 +12,35 @@ const sampleImages = [
     id: '1',
     name: 'Elegant Black Dress',
     company: 'Zara',
-    image: 'https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=400&h=600&fit=crop',
+    image: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&h=600&fit=crop',
     buyUrl: '#'
   },
   {
     id: '2',
     name: 'Casual White Sneakers',
     company: 'Nike',
-    image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=600&fit=crop',
+    image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=600&fit=crop',
     buyUrl: '#'
   },
   {
     id: '3',
     name: 'Designer Handbag',
     company: 'Gucci',
-    image: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=400&h=600&fit=crop',
+    image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&h=600&fit=crop',
     buyUrl: '#'
   },
   {
     id: '4',
     name: 'Summer Sunglasses',
     company: 'Ray-Ban',
-    image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400&h=600&fit=crop',
+    image: 'https://images.unsplash.com/photo-1506629905607-c8d412e26e7c?w=400&h=600&fit=crop',
     buyUrl: '#'
   },
   {
     id: '5',
     name: 'Leather Jacket',
     company: 'Zara',
-    image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=600&fit=crop',
+    image: 'https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?w=400&h=600&fit=crop',
     buyUrl: '#'
   }
 ];
@@ -76,7 +76,7 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
           <X className="w-6 h-6 text-white" />
         </button>
         
-        <div className="flex-1 flex items-center justify-center">
+        <div className="flex-1 flex items-center justify-center overflow-hidden">
           <img 
             src={item.image} 
             alt={item.name}
@@ -120,7 +120,7 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
 
   return (
     <div className="h-full">
-      <div className="overflow-x-scroll overflow-y-hidden">
+      <div className="overflow-x-scroll overflow-y-hidden scrollbar-hide">
         <div className="flex gap-4 p-4 w-max">
           {sampleImages.map((item) => (
             <div key={item.id} className="flex-none w-64 h-full relative group">

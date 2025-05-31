@@ -1,5 +1,5 @@
 
-import { User, Settings, Clock, Shield } from 'lucide-react';
+import { User, Settings, Clock, Shield, Edit, Camera } from 'lucide-react';
 
 const ProfilePage = () => {
   return (
@@ -17,6 +17,16 @@ const ProfilePage = () => {
 
       {/* Menu Items */}
       <div className="space-y-2">
+        <button className="w-full flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors text-left">
+          <Edit className="w-5 h-5 text-gray-600" />
+          <span className="text-black">Edit Username</span>
+        </button>
+
+        <button className="w-full flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors text-left">
+          <Camera className="w-5 h-5 text-gray-600" />
+          <span className="text-black">Update Likeness</span>
+        </button>
+
         <button className="w-full flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors text-left">
           <Settings className="w-5 h-5 text-gray-600" />
           <span className="text-black">Settings</span>
