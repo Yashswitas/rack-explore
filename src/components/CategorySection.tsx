@@ -10,7 +10,7 @@ const categories = [
       { name: 'Silk Blouse', brand: 'Mango', image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=200&h=250&fit=crop' },
       { name: 'Crop Top', brand: 'Zara', image: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=200&h=250&fit=crop' },
       { name: 'Black Tank Top', brand: 'H&M', image: 'https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=200&h=250&fit=crop' },
-      { name: 'Striped Shirt', brand: 'COS', image: 'https://images.unsplash.com/photo-1541840031508-326b77c9a17e?w=200&h=250&fit=crop' },
+      { name: 'Striped Shirt', brand: 'COS', image: 'https://images.unsplash.com/photo-1541840031508-326b77c609a7?w=200&h=250&fit=crop' },
       { name: 'Gray Hoodie', brand: 'Nike', image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=200&h=250&fit=crop' },
       { name: 'Navy Blazer', brand: 'Zara', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=250&fit=crop' },
       { name: 'Knit Sweater', brand: 'H&M', image: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=200&h=250&fit=crop' },
@@ -67,27 +67,6 @@ const categories = [
     ]
   },
   {
-    name: 'Bags',
-    items: [
-      { name: 'Leather Tote Bag', brand: 'Coach', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=250&fit=crop' },
-      { name: 'Crossbody Bag', brand: 'Marc Jacobs', image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&h=250&fit=crop' },
-      { name: 'Canvas Backpack', brand: 'Herschel', image: 'https://images.unsplash.com/photo-1581605405669-fcdf81165afa?w=200&h=250&fit=crop' },
-      { name: 'Evening Clutch', brand: 'Chanel', image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=200&h=250&fit=crop' },
-      { name: 'Shoulder Bag', brand: 'Prada', image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&h=250&fit=crop' },
-      { name: 'Messenger Bag', brand: 'Fossil', image: 'https://images.unsplash.com/photo-1581605405669-fcdf81165afa?w=200&h=250&fit=crop' },
-      { name: 'Hobo Bag', brand: 'Coach', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=250&fit=crop' },
-      { name: 'Bucket Bag', brand: 'Louis Vuitton', image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=200&h=250&fit=crop' },
-      { name: 'Structured Satchel', brand: 'Kate Spade', image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&h=250&fit=crop' },
-      { name: 'Mini Handbag', brand: 'Jacquemus', image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=200&h=250&fit=crop' },
-      { name: 'Work Tote', brand: 'Celine', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=250&fit=crop' },
-      { name: 'Chain Bag', brand: 'Jimmy Choo', image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=200&h=250&fit=crop' },
-      { name: 'Travel Duffel', brand: 'Away', image: 'https://images.unsplash.com/photo-1581605405669-fcdf81165afa?w=200&h=250&fit=crop' },
-      { name: 'Belt Bag', brand: 'Gucci', image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&h=250&fit=crop' },
-      { name: 'Laptop Bag', brand: 'Herschel', image: 'https://images.unsplash.com/photo-1581605405669-fcdf81165afa?w=200&h=250&fit=crop' },
-      { name: 'Gym Bag', brand: 'Nike', image: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&h=250&fit=crop' },
-    ]
-  },
-  {
     name: 'Shoes',
     items: [
       { name: 'White Sneakers', brand: 'Adidas', image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=200&h=250&fit=crop' },
@@ -107,31 +86,14 @@ const categories = [
       { name: 'Leather Mules', brand: 'Hermès', image: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&h=250&fit=crop' },
       { name: 'Platform Shoes', brand: 'Stella McCartney', image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&h=250&fit=crop' },
     ]
-  },
-  {
-    name: 'Accessories',
-    items: [
-      { name: 'Gold Watch', brand: 'Rolex', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=250&fit=crop' },
-      { name: 'Aviator Sunglasses', brand: 'Ray-Ban', image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=200&h=250&fit=crop' },
-      { name: 'Silk Scarf', brand: 'Hermès', image: 'https://images.unsplash.com/photo-1596783779699-4055c0a2a79a?w=200&h=250&fit=crop' },
-      { name: 'Pearl Necklace', brand: 'Tiffany & Co.', image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=200&h=250&fit=crop' },
-      { name: 'Leather Belt', brand: 'Gucci', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=250&fit=crop' },
-      { name: 'Diamond Earrings', brand: 'Cartier', image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=200&h=250&fit=crop' },
-      { name: 'Baseball Cap', brand: 'Nike', image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=200&h=250&fit=crop' },
-      { name: 'Hair Clip', brand: 'Cult Gaia', image: 'https://images.unsplash.com/photo-1596783779699-4055c0a2a79a?w=200&h=250&fit=crop' },
-      { name: 'Crystal Brooch', brand: 'Chanel', image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=200&h=250&fit=crop' },
-      { name: 'Statement Ring', brand: 'Bulgari', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=250&fit=crop' },
-      { name: 'Chain Bracelet', brand: 'Pandora', image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=200&h=250&fit=crop' },
-      { name: 'Delicate Anklet', brand: 'Jennifer Meyer', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=250&fit=crop' },
-      { name: 'Headband', brand: 'Lele Sadoughi', image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=200&h=250&fit=crop' },
-      { name: 'Leather Gloves', brand: 'Bottega Veneta', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=250&fit=crop' },
-      { name: 'Silk Tie', brand: 'Tom Ford', image: 'https://images.unsplash.com/photo-1596783779699-4055c0a2a79a?w=200&h=250&fit=crop' },
-      { name: 'Pocket Square', brand: 'Brunello Cucinelli', image: 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=200&h=250&fit=crop' },
-    ]
   }
 ];
 
-const CategorySection = () => {
+interface CategorySectionProps {
+  onOverlayChange: (isOpen: boolean) => void;
+}
+
+const CategorySection = ({ onOverlayChange }: CategorySectionProps) => {
   const [selectedItem, setSelectedItem] = useState<{
     name: string;
     brand: string;
@@ -146,6 +108,12 @@ const CategorySection = () => {
       image: item.image,
       category: categoryName.toLowerCase(),
     });
+    onOverlayChange(true);
+  };
+
+  const handleCloseOverlay = () => {
+    setSelectedItem(null);
+    onOverlayChange(false);
   };
 
   return (
@@ -176,7 +144,7 @@ const CategorySection = () => {
       {selectedItem && (
         <ItemOverlay 
           selectedItem={selectedItem}
-          onClose={() => setSelectedItem(null)}
+          onClose={handleCloseOverlay}
         />
       )}
     </div>

@@ -28,11 +28,46 @@ const topsItems = [
   { name: 'Striped Shirt', brand: 'COS', image: 'https://images.unsplash.com/photo-1541840031508-326b77c609a7?w=200&h=250&fit=crop' },
 ];
 
+const shoesItems = [
+  { name: 'White Sneakers', brand: 'Adidas', image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=200&h=250&fit=crop' },
+  { name: 'Black Ankle Boots', brand: 'Dr. Martens', image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5e?w=200&h=250&fit=crop' },
+  { name: 'Red High Heels', brand: 'Jimmy Choo', image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&h=250&fit=crop' },
+  { name: 'Black Ballet Flats', brand: 'Repetto', image: 'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=200&h=250&fit=crop' },
+  { name: 'Running Shoes', brand: 'Nike', image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=250&fit=crop' },
+];
+
+const dressesItems = [
+  { name: 'Floral Maxi Dress', brand: 'Reformation', image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=200&h=250&fit=crop' },
+  { name: 'Little Black Dress', brand: 'Zara', image: 'https://images.unsplash.com/photo-1566479179817-19b6073c9ea9?w=200&h=250&fit=crop' },
+  { name: 'Sundress', brand: 'H&M', image: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=200&h=250&fit=crop' },
+  { name: 'Cocktail Dress', brand: 'ASOS', image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=200&h=250&fit=crop' },
+  { name: 'Wrap Dress', brand: 'Mango', image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=200&h=250&fit=crop' },
+];
+
 const ItemOverlay = ({ selectedItem, onClose }: ItemOverlayProps) => {
   const [selectedSecondItem, setSelectedSecondItem] = useState(0);
   
-  const secondCategoryItems = selectedItem.category === 'tops' ? bottomsItems : topsItems;
-  const secondCategoryName = selectedItem.category === 'tops' ? 'bottoms' : 'tops';
+  // Implement pairing mechanism
+  let secondCategoryItems;
+  let secondCategoryName;
+  
+  if (selectedItem.category === 'tops') {
+    secondCategoryItems = bottomsItems;
+    secondCategoryName = 'bottoms';
+  } else if (selectedItem.category === 'bottoms') {
+    secondCategoryItems = topsItems;
+    secondCategoryName = 'tops';
+  } else if (selectedItem.category === 'dresses') {
+    secondCategoryItems = shoesItems;
+    secondCategoryName = 'shoes';
+  } else if (selectedItem.category === 'shoes') {
+    secondCategoryItems = dressesItems;
+    secondCategoryName = 'dresses';
+  } else {
+    // Default fallback
+    secondCategoryItems = topsItems;
+    secondCategoryName = 'tops';
+  }
 
   const handleTryOn = () => {
     console.log('Try-on clicked');
