@@ -45,31 +45,32 @@ const dressesItems = [
 ];
 
 const ItemOverlay = ({ selectedItem, onClose }: ItemOverlayProps) => {
-  const [selectedSecondItem, setSelectedSecondItem] = useState(0);
+  const [selectedSecondItem, setSelectedSecondItem] = useState<number | null>(null);
   
   // Implement pairing mechanism
   let secondCategoryItems;
   let secondCategoryName;
   
-  if (selectedItem.category === 'tops') {
+  if (selectedItem.category === 'top') {
     secondCategoryItems = bottomsItems;
-    secondCategoryName = 'bottoms';
-  } else if (selectedItem.category === 'bottoms') {
+    secondCategoryName = 'bottom';
+  } else if (selectedItem.category === 'bottom') {
     secondCategoryItems = topsItems;
-    secondCategoryName = 'tops';
-  } else if (selectedItem.category === 'dresses') {
+    secondCategoryName = 'top';
+  } else if (selectedItem.category === 'dress') {
     secondCategoryItems = shoesItems;
     secondCategoryName = 'shoes';
   } else if (selectedItem.category === 'shoes') {
     secondCategoryItems = dressesItems;
-    secondCategoryName = 'dresses';
+    secondCategoryName = 'dress';
   } else {
     // Default fallback
     secondCategoryItems = topsItems;
-    secondCategoryName = 'tops';
+    secondCategoryName = 'top';
   }
 
   const handleTryOn = () => {
+    if (selectedSecondItem === null) return;
     console.log('Try-on clicked');
     alert('Try-on functionality');
   };
@@ -101,16 +102,22 @@ const ItemOverlay = ({ selectedItem, onClose }: ItemOverlayProps) => {
           </div>
           
           <div className="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden">
-            <img 
-              src={secondCategoryItems[selectedSecondItem].image} 
-              alt={secondCategoryItems[selectedSecondItem].name}
-              className="w-full h-full object-cover"
-            />
+            {selectedSecondItem !== null ? (
+              <img 
+                src={secondCategoryItems[selectedSecondItem].image} 
+                alt={secondCategoryItems[selectedSecondItem].name}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400">
+                Select an item
+              </div>
+            )}
           </div>
         </div>
 
         <div className="mb-4">
-          <p className="text-sm text-gray-600 mb-2 capitalize">{secondCategoryName}</p>
+          <p className="text-sm text-gray-600 mb-2 capitalize">Choose a {secondCategoryName}</p>
           <div className="flex gap-2 overflow-x-auto pb-2">
             {secondCategoryItems.map((item, index) => (
               <button
@@ -133,14 +140,19 @@ const ItemOverlay = ({ selectedItem, onClose }: ItemOverlayProps) => {
         <div className="flex gap-3">
           <button 
             onClick={handleTryOn}
-            className="flex-1 flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-lg font-medium"
+            disabled={selectedSecondItem === null}
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-medium transition-all ${
+              selectedSecondItem === null 
+                ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50' 
+                : 'bg-primary text-white hover:bg-primary/90'
+            }`}
           >
             <Camera className="w-4 h-4" />
             Try On
           </button>
           <button 
             onClick={handleBuyNow}
-            className="flex-1 flex items-center justify-center gap-2 bg-gray-100 text-black py-3 rounded-lg font-medium"
+            className="flex-1 flex items-center justify-center gap-2 bg-gray-100 text-black py-3 rounded-lg font-medium hover:bg-gray-200"
           >
             <ShoppingBag className="w-4 h-4" />
             Buy Now

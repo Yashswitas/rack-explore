@@ -1,10 +1,9 @@
-
 import { useState } from 'react';
 import ItemOverlay from './ItemOverlay';
 
 const categories = [
   {
-    name: 'Tops',
+    name: 'Top',
     items: [
       { name: 'Classic White T-Shirt', brand: 'H&M', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200&h=250&fit=crop' },
       { name: 'Silk Blouse', brand: 'Mango', image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=200&h=250&fit=crop' },
@@ -25,7 +24,7 @@ const categories = [
     ]
   },
   {
-    name: 'Bottoms',
+    name: 'Bottom',
     items: [
       { name: 'High-Waisted Jeans', brand: "Levi's", image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=200&h=250&fit=crop' },
       { name: 'Wide Leg Trousers', brand: 'COS', image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=200&h=250&fit=crop' },
@@ -46,7 +45,7 @@ const categories = [
     ]
   },
   {
-    name: 'Dresses',
+    name: 'Dress',
     items: [
       { name: 'Floral Maxi Dress', brand: 'Reformation', image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=200&h=250&fit=crop' },
       { name: 'Little Black Dress', brand: 'Zara', image: 'https://images.unsplash.com/photo-1566479179817-19b6073c9ea9?w=200&h=250&fit=crop' },
