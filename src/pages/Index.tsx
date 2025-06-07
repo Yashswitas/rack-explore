@@ -19,10 +19,14 @@ const Index = () => {
   const [savedItems, setSavedItems] = useState<SavedItem[]>([]);
   const [showAddOverlay, setShowAddOverlay] = useState(false);
   const [isItemOverlayOpen, setIsItemOverlayOpen] = useState(false);
+  const [isExpandedViewOpen, setIsExpandedViewOpen] = useState(false);
 
   const handleSaveItem = (item: SavedItem) => {
     setSavedItems(prev => [...prev, item]);
   };
+
+  // Check if any overlay is open
+  const isAnyOverlayOpen = showAddOverlay || isItemOverlayOpen || isExpandedViewOpen;
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -33,6 +37,7 @@ const Index = () => {
           <ExploreTab 
             onSaveItem={handleSaveItem} 
             onOverlayChange={setIsItemOverlayOpen}
+            onExpandedViewChange={setIsExpandedViewOpen}
           />
         )}
         {activeTab === 'rack' && (
@@ -40,7 +45,7 @@ const Index = () => {
         )}
       </div>
 
-      {!isItemOverlayOpen && (
+      {!isAnyOverlayOpen && (
         <div className="fixed bottom-0 left-0 right-0 z-50">
           <BottomNavigation 
             activeTab={activeTab}

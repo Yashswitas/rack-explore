@@ -12,35 +12,35 @@ const sampleImages = [
     id: '1',
     name: 'Elegant Black Dress',
     company: 'Zara',
-    image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400&h=600&fit=crop',
+    image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400&h=600&fit=crop',
     buyUrl: '#'
   },
   {
     id: '2',
     name: 'Casual White T-Shirt',
     company: 'H&M',
-    image: 'https://images.unsplash.com/photo-1583496661160-fb5886a13804?w=400&h=600&fit=crop',
+    image: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&h=600&fit=crop',
     buyUrl: '#'
   },
   {
     id: '3',
     name: 'Blue Denim Jacket',
     company: 'Levi\'s',
-    image: 'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=400&h=600&fit=crop',
+    image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=600&fit=crop',
     buyUrl: '#'
   },
   {
     id: '4',
     name: 'Red Summer Dress',
     company: 'Mango',
-    image: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400&h=600&fit=crop',
+    image: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=400&h=600&fit=crop',
     buyUrl: '#'
   },
   {
     id: '5',
     name: 'White Blouse',
     company: 'COS',
-    image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400&h=600&fit=crop',
+    image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=600&fit=crop',
     buyUrl: '#'
   }
 ];
@@ -67,6 +67,7 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
   const handleDismiss = (itemId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setDismissedItems(prev => [...prev, itemId]);
+    setExpandedImage(null);
     console.log('Item dismissed:', itemId);
   };
 
@@ -101,7 +102,7 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
           
           <div className="flex gap-4">
             <button 
-              onClick={() => handleDismiss(item.id, {} as React.MouseEvent)}
+              onClick={(e) => handleDismiss(item.id, e)}
               className="flex-1 flex items-center justify-center gap-2 bg-red-100 text-red-600 py-3 rounded-lg font-medium"
             >
               <Scissors className="w-4 h-4" />
