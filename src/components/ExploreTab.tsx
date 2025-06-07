@@ -6,9 +6,10 @@ import { SavedItem } from '../pages/Index';
 
 interface ExploreTabProps {
   onSaveItem: (item: SavedItem) => void;
+  onOverlayChange?: (isOpen: boolean) => void;
 }
 
-const ExploreTab = ({ onSaveItem }: ExploreTabProps) => {
+const ExploreTab = ({ onSaveItem, onOverlayChange }: ExploreTabProps) => {
   return (
     <div className="h-full flex flex-col">
       <div className="h-1/2">

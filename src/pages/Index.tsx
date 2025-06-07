@@ -18,6 +18,7 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState('explore');
   const [savedItems, setSavedItems] = useState<SavedItem[]>([]);
   const [showAddOverlay, setShowAddOverlay] = useState(false);
+  const [isItemOverlayOpen, setIsItemOverlayOpen] = useState(false);
 
   const handleSaveItem = (item: SavedItem) => {
     setSavedItems(prev => [...prev, item]);
@@ -29,20 +30,25 @@ const Index = () => {
       
       <div className="flex-1 overflow-hidden pb-16">
         {activeTab === 'explore' && (
-          <ExploreTab onSaveItem={handleSaveItem} />
+          <ExploreTab 
+            onSaveItem={handleSaveItem} 
+            onOverlayChange={setIsItemOverlayOpen}
+          />
         )}
         {activeTab === 'rack' && (
           <RackTab savedItems={savedItems} />
         )}
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 z-50">
-        <BottomNavigation 
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          onAddClick={() => setShowAddOverlay(true)}
-        />
-      </div>
+      {!isItemOverlayOpen && (
+        <div className="fixed bottom-0 left-0 right-0 z-50">
+          <BottomNavigation 
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            onAddClick={() => setShowAddOverlay(true)}
+          />
+        </div>
+      )}
 
       {showAddOverlay && (
         <AddItemOverlay 

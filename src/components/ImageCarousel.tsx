@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { X, Share, Heart, ShoppingBag } from 'lucide-react';
+import { X, Share, Heart, ShoppingBag, Scissors } from 'lucide-react';
 import { SavedItem } from '../pages/Index';
 
 interface ImageCarouselProps {
@@ -12,41 +12,42 @@ const sampleImages = [
     id: '1',
     name: 'Elegant Black Dress',
     company: 'Zara',
-    image: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&h=600&fit=crop',
+    image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400&h=600&fit=crop',
     buyUrl: '#'
   },
   {
     id: '2',
-    name: 'Casual White Sneakers',
-    company: 'Nike',
-    image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&h=600&fit=crop',
+    name: 'Casual White T-Shirt',
+    company: 'H&M',
+    image: 'https://images.unsplash.com/photo-1583496661160-fb5886a13804?w=400&h=600&fit=crop',
     buyUrl: '#'
   },
   {
     id: '3',
-    name: 'Designer Handbag',
-    company: 'Gucci',
-    image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&h=600&fit=crop',
+    name: 'Blue Denim Jacket',
+    company: 'Levi\'s',
+    image: 'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=400&h=600&fit=crop',
     buyUrl: '#'
   },
   {
     id: '4',
-    name: 'Summer Sunglasses',
-    company: 'Ray-Ban',
-    image: 'https://images.unsplash.com/photo-1506629905607-c8d412e26e7c?w=400&h=600&fit=crop',
+    name: 'Red Summer Dress',
+    company: 'Mango',
+    image: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400&h=600&fit=crop',
     buyUrl: '#'
   },
   {
     id: '5',
-    name: 'Leather Jacket',
-    company: 'Zara',
-    image: 'https://images.unsplash.com/photo-1521223890158-f9f7c3d5d504?w=400&h=600&fit=crop',
+    name: 'White Blouse',
+    company: 'COS',
+    image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400&h=600&fit=crop',
     buyUrl: '#'
   }
 ];
 
 const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
+  const [dismissedItems, setDismissedItems] = useState<string[]>([]);
 
   const handleSave = (item: SavedItem) => {
     onSaveItem(item);
@@ -62,6 +63,14 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
     console.log('Share button clicked');
     alert('Share functionality');
   };
+
+  const handleDismiss = (itemId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDismissedItems(prev => [...prev, itemId]);
+    console.log('Item dismissed:', itemId);
+  };
+
+  const visibleImages = sampleImages.filter(item => !dismissedItems.includes(item.id));
 
   if (expandedImage) {
     const item = sampleImages.find(img => img.id === expandedImage);
@@ -88,29 +97,22 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
           <div className="mb-4">
             <h3 className="font-semibold text-lg text-black">{item.name}</h3>
             <p className="text-gray-600">{item.company}</p>
-            <button 
-              onClick={handleBuy}
-              className="mt-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2"
-            >
-              <ShoppingBag className="w-4 h-4" />
-              Buy Now
-            </button>
           </div>
           
           <div className="flex gap-4">
             <button 
-              onClick={handleShare}
-              className="flex-1 flex items-center justify-center gap-2 bg-gray-100 text-black py-3 rounded-lg font-medium"
+              onClick={() => handleDismiss(item.id, {} as React.MouseEvent)}
+              className="flex-1 flex items-center justify-center gap-2 bg-red-100 text-red-600 py-3 rounded-lg font-medium"
             >
-              <Share className="w-4 h-4" />
-              Share
+              <Scissors className="w-4 h-4" />
+              Dismiss
             </button>
             <button 
-              onClick={() => handleSave(item)}
+              onClick={handleBuy}
               className="flex-1 flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-lg font-medium"
             >
-              <Heart className="w-4 h-4" />
-              Save
+              <ShoppingBag className="w-4 h-4" />
+              Buy Now
             </button>
           </div>
         </div>
@@ -122,7 +124,7 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
     <div className="h-full">
       <div className="overflow-x-scroll overflow-y-hidden scrollbar-hide">
         <div className="flex gap-4 p-4 w-max">
-          {sampleImages.map((item) => (
+          {visibleImages.map((item) => (
             <div key={item.id} className="flex-none w-64 h-full relative group">
               <img 
                 src={item.image} 
@@ -131,7 +133,6 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
                 onClick={() => setExpandedImage(item.id)}
               />
               
-              {/* Floating action buttons */}
               <div className="absolute top-2 right-2 flex flex-col gap-2">
                 <button 
                   onClick={(e) => {
@@ -153,7 +154,6 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
                 </button>
               </div>
               
-              {/* Simple title overlay at bottom */}
               <div className="absolute bottom-2 left-2 right-2 bg-black/70 backdrop-blur-sm rounded-lg p-2">
                 <h3 className="font-medium text-white text-sm">{item.name}</h3>
                 <p className="text-white/80 text-xs">{item.company}</p>
