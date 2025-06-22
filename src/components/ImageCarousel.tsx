@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { X, Share, Heart, ShoppingBag, Scissors } from 'lucide-react';
 import { SavedItem } from '../pages/Index';
@@ -60,9 +59,11 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
     } else {
       // Add to saved items
       setSavedItems(prev => [...prev, item.id]);
-      onSaveItem(item);
       console.log('Item saved:', item);
     }
+    
+    // Always call the parent handler to manage the actual saved items list
+    onSaveItem(item);
   };
 
   const handleBuy = () => {

@@ -22,7 +22,17 @@ const Index = () => {
   const [isExpandedViewOpen, setIsExpandedViewOpen] = useState(false);
 
   const handleSaveItem = (item: SavedItem) => {
-    setSavedItems(prev => [...prev, item]);
+    setSavedItems(prev => {
+      // Check if item already exists
+      const existingIndex = prev.findIndex(savedItem => savedItem.id === item.id);
+      if (existingIndex !== -1) {
+        // Item exists, remove it (unsave)
+        return prev.filter(savedItem => savedItem.id !== item.id);
+      } else {
+        // Item doesn't exist, add it (save)
+        return [...prev, item];
+      }
+    });
   };
 
   // Check if any overlay is open
