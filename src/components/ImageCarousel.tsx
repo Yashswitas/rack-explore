@@ -48,10 +48,21 @@ const sampleImages = [
 const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const [dismissedItems, setDismissedItems] = useState<string[]>([]);
+  const [savedItems, setSavedItems] = useState<string[]>([]);
 
-  const handleSave = (item: SavedItem) => {
-    onSaveItem(item);
-    console.log('Item saved:', item);
+  const handleSave = (item: SavedItem, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (savedItems.includes(item.id)) {
+      // Remove from saved items
+      setSavedItems(prev => prev.filter(id => id !== item.id));
+      console.log('Item unsaved:', item);
+    } else {
+      // Add to saved items
+      setSavedItems(prev => [...prev, item.id]);
+      onSaveItem(item);
+      console.log('Item saved:', item);
+    }
   };
 
   const handleBuy = () => {
@@ -145,13 +156,13 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
                   <Share className="w-4 h-4 text-black" />
                 </button>
                 <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleSave(item);
-                  }}
+                  onClick={(e) => handleSave(item, e)}
                   className="bg-primary p-2 rounded-full shadow-lg hover:bg-primary/90 transition-colors"
                 >
-                  <Heart className="w-4 h-4 text-white" />
+                  <Heart 
+                    className="w-4 h-4 text-white" 
+                    fill={savedItems.includes(item.id) ? "white" : "none"}
+                  />
                 </button>
               </div>
               
