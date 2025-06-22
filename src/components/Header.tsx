@@ -15,7 +15,7 @@ const Header = () => {
 
   return (
     <header className="bg-white border-b border-gray-100 py-4 px-6 flex justify-between items-center">
-      <h1 className="text-2xl font-bold text-black tracking-wider">RACK</h1>
+      <h1 className="text-2xl font-bold text-black tracking-wider">FITS</h1>
       
       <Sheet open={isProfileOpen} onOpenChange={setIsProfileOpen}>
         <SheetTrigger asChild>

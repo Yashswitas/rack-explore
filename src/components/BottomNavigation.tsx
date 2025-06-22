@@ -34,7 +34,7 @@ const BottomNavigation = ({ activeTab, onTabChange, onAddClick }: BottomNavigati
           activeTab === 'rack' ? 'text-primary' : 'text-gray-600'
         }`}
       >
-        Rack
+        Saves
       </button>
     </div>
   );
