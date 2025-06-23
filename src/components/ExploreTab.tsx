@@ -6,11 +6,12 @@ import { SavedItem } from '../pages/Index';
 
 interface ExploreTabProps {
   onSaveItem: (item: SavedItem) => void;
+  savedItems: SavedItem[];
   onOverlayChange?: (isOpen: boolean) => void;
   onExpandedViewChange?: (isOpen: boolean) => void;
 }
 
-const ExploreTab = ({ onSaveItem, onOverlayChange, onExpandedViewChange }: ExploreTabProps) => {
+const ExploreTab = ({ onSaveItem, savedItems, onOverlayChange, onExpandedViewChange }: ExploreTabProps) => {
   const [isItemOverlayOpen, setIsItemOverlayOpen] = useState(false);
 
   const handleOverlayChange = (isOpen: boolean) => {
@@ -35,7 +36,7 @@ const ExploreTab = ({ onSaveItem, onOverlayChange, onExpandedViewChange }: Explo
   return (
     <div className="h-full flex flex-col">
       <div className="h-1/2">
-        <ImageCarousel onSaveItem={onSaveItem} />
+        <ImageCarousel onSaveItem={onSaveItem} savedItems={savedItems} />
       </div>
       <div className="h-1/2 overflow-y-auto bg-gray-50">
         <CategorySection onOverlayChange={handleOverlayChange} />

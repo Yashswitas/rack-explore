@@ -46,6 +46,7 @@ const Index = () => {
         {activeTab === 'explore' && (
           <ExploreTab 
             onSaveItem={handleSaveItem} 
+            savedItems={savedItems}
             onOverlayChange={setIsItemOverlayOpen}
             onExpandedViewChange={setIsExpandedViewOpen}
           />

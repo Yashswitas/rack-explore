@@ -1,10 +1,10 @@
-
 import { useState } from 'react';
 import { X, Share, Heart, ShoppingBag, Scissors } from 'lucide-react';
 import { SavedItem } from '../pages/Index';
 
 interface ImageCarouselProps {
   onSaveItem: (item: SavedItem) => void;
+  savedItems: SavedItem[];
 }
 
 const sampleImages = [
@@ -45,29 +45,18 @@ const sampleImages = [
   }
 ];
 
-const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
+const ImageCarousel = ({ onSaveItem, savedItems }: ImageCarouselProps) => {
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const [dismissedItems, setDismissedItems] = useState<string[]>([]);
-  // Binary state: 0 = unsaved, 1 = saved
-  const [itemSaveStates, setItemSaveStates] = useState<Record<string, 0 | 1>>({});
 
   const handleSave = (item: SavedItem, e: React.MouseEvent) => {
     e.stopPropagation();
     
-    // Get current state (default to 0 if not set)
-    const currentState = itemSaveStates[item.id] || 0;
+    // Check if item is currently saved
+    const isCurrentlySaved = savedItems.some(savedItem => savedItem.id === item.id);
     
-    // Toggle: 0 becomes 1, 1 becomes 0
-    const newState = currentState === 0 ? 1 : 0;
-    
-    // Update the binary state
-    setItemSaveStates(prev => ({
-      ...prev,
-      [item.id]: newState
-    }));
-    
-    console.log(`Item ${item.name} state changed to:`, newState);
-    console.log(newState === 1 ? 'Item saved' : 'Item unsaved');
+    console.log(`Item ${item.name} current state:`, isCurrentlySaved ? 'saved' : 'unsaved');
+    console.log(isCurrentlySaved ? 'Item will be unsaved' : 'Item will be saved');
     
     // Call parent handler to manage the actual saved items list
     onSaveItem(item);
@@ -145,8 +134,8 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
       <div className="overflow-x-scroll overflow-y-hidden scrollbar-hide">
         <div className="flex gap-4 p-4 w-max">
           {visibleImages.map((item) => {
-            // Get current save state (0 or 1)
-            const saveState = itemSaveStates[item.id] || 0;
+            // Check if item is saved by looking at the savedItems array
+            const isItemSaved = savedItems.some(savedItem => savedItem.id === item.id);
             
             return (
               <div key={item.id} className="flex-none w-64 h-full relative group">
@@ -173,7 +162,7 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
                   >
                     <Heart 
                       className="w-4 h-4 text-white" 
-                      fill={saveState === 1 ? "white" : "none"}
+                      fill={isItemSaved ? "white" : "none"}
                     />
                   </button>
                 </div>
