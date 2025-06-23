@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { X } from 'lucide-react';
+import { X, Scissors, Heart } from 'lucide-react';
 import { SavedItem } from '../pages/Index';
 
 interface AddItemOverlayProps {
@@ -8,33 +8,124 @@ interface AddItemOverlayProps {
   onAddItem: (item: SavedItem) => void;
 }
 
+// Common e-commerce domains for validation
+const ecommerceDomains = [
+  'amazon.com', 'amazon.co.uk', 'amazon.ca', 'amazon.de', 'amazon.fr',
+  'ebay.com', 'etsy.com', 'shopify.com', 'woocommerce.com',
+  'zara.com', 'hm.com', 'nike.com', 'adidas.com', 'uniqlo.com',
+  'target.com', 'walmart.com', 'bestbuy.com', 'macys.com',
+  'nordstrom.com', 'sephora.com', 'ulta.com', 'asos.com',
+  'zalando.com', 'shop.', '.shop', 'store.', '.store'
+];
+
 const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
   const [url, setUrl] = useState('');
-  const [isAdding, setIsAdding] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [validationResult, setValidationResult] = useState<{
+    isValid: boolean;
+    previewData?: {
+      title: string;
+      image: string;
+      domain: string;
+    };
+    message: string;
+  } | null>(null);
+
+  const isEcommerceUrl = (urlString: string): boolean => {
+    try {
+      const urlObj = new URL(urlString);
+      const hostname = urlObj.hostname.toLowerCase();
+      
+      return ecommerceDomains.some(domain => 
+        hostname.includes(domain) || hostname.endsWith(domain)
+      );
+    } catch {
+      return false;
+    }
+  };
+
+  const generatePreviewData = (urlString: string) => {
+    try {
+      const urlObj = new URL(urlString);
+      const domain = urlObj.hostname.replace('www.', '');
+      
+      // Generate mock preview data based on domain
+      const mockTitles = [
+        'Stylish Winter Jacket',
+        'Premium Cotton T-Shirt',
+        'Designer Sneakers',
+        'Elegant Evening Dress',
+        'Classic Denim Jeans'
+      ];
+      
+      const mockImages = [
+        'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400&h=300&fit=crop',
+        'https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=300&fit=crop'
+      ];
+      
+      return {
+        title: mockTitles[Math.floor(Math.random() * mockTitles.length)],
+        image: mockImages[Math.floor(Math.random() * mockImages.length)],
+        domain: domain
+      };
+    } catch {
+      return null;
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!url.trim()) return;
 
-    setIsAdding(true);
+    setIsProcessing(true);
     
-    // Simulate adding item
+    // Simulate checking the webpage in background
     setTimeout(() => {
+      const isValid = isEcommerceUrl(url);
+      
+      if (isValid) {
+        const previewData = generatePreviewData(url);
+        setValidationResult({
+          isValid: true,
+          previewData,
+          message: 'Success! This appears to be a shopping website.'
+        });
+      } else {
+        setValidationResult({
+          isValid: false,
+          message: 'This link doesn\'t appear to be from a shopping or e-commerce website.'
+        });
+      }
+      
+      setIsProcessing(false);
+    }, 2000);
+  };
+
+  const handleSave = () => {
+    if (validationResult?.isValid && validationResult.previewData) {
       const newItem: SavedItem = {
         id: Date.now().toString(),
-        name: 'Added Item',
-        company: 'External',
-        image: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=400&h=600&fit=crop'
+        name: validationResult.previewData.title,
+        company: validationResult.previewData.domain,
+        image: validationResult.previewData.image,
+        buyUrl: url
       };
       onAddItem(newItem);
-      setIsAdding(false);
       onClose();
-    }, 2000);
+    }
+  };
+
+  const handleDismiss = () => {
+    setValidationResult(null);
+    setUrl('');
   };
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-end">
-      <div className="bg-white w-full rounded-t-2xl p-6 animate-slide-up">
+      <div className="bg-white w-full rounded-t-2xl p-6 animate-slide-up max-h-[80vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-semibold text-black">Add Item</h3>
           <button onClick={onClose} className="text-gray-500">
@@ -42,10 +133,55 @@ const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
           </button>
         </div>
 
-        {isAdding ? (
+        {isProcessing ? (
           <div className="text-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-gray-600">Adding the item..</p>
+            <p className="text-gray-600">Checking the website...</p>
+          </div>
+        ) : validationResult ? (
+          <div className="space-y-6">
+            <div className={`p-4 rounded-lg ${validationResult.isValid ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+              <p className={`font-medium ${validationResult.isValid ? 'text-green-800' : 'text-red-800'}`}>
+                {validationResult.message}
+              </p>
+            </div>
+
+            {validationResult.isValid && validationResult.previewData && (
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h4 className="font-medium text-gray-900 mb-3">Preview</h4>
+                <div className="flex gap-4">
+                  <img 
+                    src={validationResult.previewData.image}
+                    alt={validationResult.previewData.title}
+                    className="w-20 h-20 object-cover rounded-lg"
+                  />
+                  <div className="flex-1">
+                    <h5 className="font-medium text-gray-900">{validationResult.previewData.title}</h5>
+                    <p className="text-sm text-gray-600">{validationResult.previewData.domain}</p>
+                    <p className="text-xs text-gray-500 mt-1 break-all">{url}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="flex gap-4">
+              <button 
+                onClick={handleDismiss}
+                className="flex-1 flex items-center justify-center gap-2 bg-red-100 text-red-600 py-3 rounded-lg font-medium hover:bg-red-200 transition-colors"
+              >
+                <Scissors className="w-4 h-4" />
+                Dismiss
+              </button>
+              {validationResult.isValid && (
+                <button 
+                  onClick={handleSave}
+                  className="flex-1 flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+                >
+                  <Heart className="w-4 h-4" />
+                  Save
+                </button>
+              )}
+            </div>
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
