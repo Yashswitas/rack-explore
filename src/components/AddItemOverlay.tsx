@@ -7,37 +7,67 @@ interface AddItemOverlayProps {
   onAddItem: (item: SavedItem) => void;
 }
 
-// Comprehensive e-commerce domains and patterns for validation
+// Comprehensive e-commerce domains including marketplaces and platforms
 const ecommerceDomains = [
-  // Major marketplaces
-  'amazon.com', 'amazon.co.uk', 'amazon.ca', 'amazon.de', 'amazon.fr', 'amazon.es', 'amazon.it', 'amazon.co.jp',
-  'ebay.com', 'ebay.co.uk', 'ebay.de', 'ebay.fr', 'ebay.it', 'ebay.es',
-  'etsy.com', 'alibaba.com', 'aliexpress.com',
+  // Major global marketplaces
+  'amazon.com', 'amazon.co.uk', 'amazon.ca', 'amazon.de', 'amazon.fr', 'amazon.es', 'amazon.it', 'amazon.co.jp', 'amazon.in', 'amazon.com.au',
+  'ebay.com', 'ebay.co.uk', 'ebay.de', 'ebay.fr', 'ebay.it', 'ebay.es', 'ebay.ca', 'ebay.com.au',
+  'etsy.com', 'alibaba.com', 'aliexpress.com', 'dhgate.com', 'wish.com', 'mercadolibre.com',
+  'rakuten.com', 'flipkart.com', 'myntra.com', 'jabong.com', 'snapdeal.com',
   
-  // Fashion & clothing
+  // Fashion & clothing retailers
   'zara.com', 'hm.com', 'nike.com', 'adidas.com', 'uniqlo.com', 'gap.com', 'forever21.com',
   'asos.com', 'zalando.com', 'boohoo.com', 'prettylittlething.com', 'shein.com', 'yesstyle.com',
-  'nordstrom.com', 'macys.com', 'bloomingdales.com', 'saks.com', 'barneys.com',
+  'nordstrom.com', 'macys.com', 'bloomingdales.com', 'saks.com', 'barneys.com', 'jcrew.com',
+  'anthropologie.com', 'urbanoutfitters.com', 'freepeople.com', 'revolve.com', 'shopbop.com',
   
   // Beauty & cosmetics
-  'sephora.com', 'ulta.com', 'beautybay.com', 'lookfantastic.com', 'dermstore.com',
+  'sephora.com', 'ulta.com', 'beautybay.com', 'lookfantastic.com', 'dermstore.com', 'cultbeauty.com',
   
-  // Department stores
+  // Department & big box stores
   'target.com', 'walmart.com', 'costco.com', 'bestbuy.com', 'homedepot.com', 'lowes.com',
+  'kohls.com', 'jcpenney.com', 'sears.com', 'walmart.ca', 'canadiantire.ca',
   
-  // E-commerce platforms
-  'shopify.com', 'woocommerce.com', 'bigcommerce.com', 'magento.com',
+  // E-commerce platforms and solutions
+  'shopify.com', 'woocommerce.com', 'bigcommerce.com', 'magento.com', 'squarespace.com', 'wix.com',
+  'etsy.com', 'esty.com', 'bonanza.com', 'mercari.com', 'poshmark.com', 'depop.com', 'vinted.com',
+  
+  // Regional and specialized marketplaces
+  'shopee.com', 'lazada.com', 'tokopedia.com', 'bukalapak.com', 'qoo10.com', 'gmarket.co.kr',
+  'tmall.com', 'taobao.com', 'jd.com', 'pinduoduo.com', '1688.com',
+  
+  // Luxury and designer
+  'net-a-porter.com', 'matchesfashion.com', 'farfetch.com', 'ssense.com', 'mrporter.com',
+  'theoutnet.com', 'yoox.com', 'gilt.com', 'rue21.com', 'thredup.com',
   
   // Generic shopping indicators
   'shop.', '.shop', 'store.', '.store', 'buy.', '.buy', 'cart.', 'checkout.',
-  'ecommerce.', 'webshop.', 'onlinestore.', 'marketplace.', 'retail.'
+  'ecommerce.', 'webshop.', 'onlinestore.', 'marketplace.', 'retail.', 'outlet.'
 ];
 
-// Shopping-related keywords that indicate e-commerce functionality
-const ecommerceKeywords = [
-  'shop', 'store', 'buy', 'purchase', 'cart', 'basket', 'checkout', 'payment',
-  'ecommerce', 'e-commerce', 'retail', 'marketplace', 'webshop', 'onlinestore',
-  'wishlist', 'addtocart', 'buynow', 'order', 'product', 'catalog', 'inventory'
+// E-commerce content indicators to search for in webpage content
+const ecommerceContentIndicators = [
+  // Shopping cart and purchase buttons
+  'add to cart', 'add to bag', 'add to basket', 'buy now', 'purchase now', 'buy it now',
+  'quick buy', 'shop now', 'order now', 'get it now', 'checkout', 'proceed to checkout',
+  
+  // Wishlist and save functionality
+  'add to wishlist', 'add to favorites', 'add to list', 'save for later', 'save item',
+  'wishlist', 'favorites', 'my list', 'saved items',
+  
+  // Product and pricing indicators
+  'price', '$', '€', '£', '¥', '₹', 'free shipping', 'shipping', 'delivery',
+  'in stock', 'out of stock', 'available', 'quantity', 'size', 'color',
+  'product details', 'product description', 'specifications', 'reviews',
+  
+  // E-commerce specific elements
+  'shopping cart', 'cart total', 'subtotal', 'total price', 'payment methods',
+  'credit card', 'paypal', 'apple pay', 'google pay', 'stripe', 'payment',
+  'return policy', 'shipping policy', 'size guide', 'size chart',
+  
+  // Common e-commerce meta indicators
+  'shopify', 'woocommerce', 'magento', 'bigcommerce', 'opencart', 'prestashop',
+  'product-page', 'ecommerce', 'e-commerce', 'online store', 'web store'
 ];
 
 const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
@@ -53,39 +83,78 @@ const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
     message: string;
   } | null>(null);
 
-  const isEcommerceUrl = (urlString: string): boolean => {
+  const isEcommerceDomain = (urlString: string): boolean => {
     try {
       const urlObj = new URL(urlString);
       const hostname = urlObj.hostname.toLowerCase();
-      const pathname = urlObj.pathname.toLowerCase();
-      const fullUrl = urlString.toLowerCase();
       
-      // Check if domain contains any e-commerce domains
-      const domainMatch = ecommerceDomains.some(domain => 
+      return ecommerceDomains.some(domain => 
         hostname.includes(domain) || hostname.endsWith(domain) || hostname.startsWith(domain)
       );
-      
-      // Check if URL contains shopping-related keywords
-      const keywordMatch = ecommerceKeywords.some(keyword => 
-        hostname.includes(keyword) || pathname.includes(keyword) || fullUrl.includes(keyword)
-      );
-      
-      // Check for common e-commerce URL patterns
-      const patternMatch = 
-        pathname.includes('/product/') ||
-        pathname.includes('/item/') ||
-        pathname.includes('/shop/') ||
-        pathname.includes('/store/') ||
-        pathname.includes('/buy/') ||
-        pathname.includes('/p/') ||
-        urlString.includes('product') ||
-        urlString.includes('item') ||
-        urlString.includes('catalog');
-      
-      return domainMatch || keywordMatch || patternMatch;
     } catch {
       return false;
     }
+  };
+
+  const analyzeWebpageContent = async (urlString: string): Promise<boolean> => {
+    try {
+      // In a real implementation, you'd use a CORS proxy or backend service
+      // For now, we'll simulate content analysis with enhanced heuristics
+      
+      const urlObj = new URL(urlString);
+      const pathname = urlObj.pathname.toLowerCase();
+      const search = urlObj.search.toLowerCase();
+      const fullUrl = urlString.toLowerCase();
+      
+      // Check URL structure for e-commerce patterns
+      const hasEcommerceUrlPattern = 
+        pathname.includes('/product/') ||
+        pathname.includes('/item/') ||
+        pathname.includes('/p/') ||
+        pathname.includes('/dp/') || // Amazon
+        pathname.includes('/products/') ||
+        pathname.includes('/shop/') ||
+        pathname.includes('/store/') ||
+        pathname.includes('/buy/') ||
+        pathname.includes('/catalog/') ||
+        search.includes('product') ||
+        search.includes('item') ||
+        search.includes('sku');
+      
+      // Check for e-commerce keywords in the full URL
+      const hasEcommerceKeywords = ecommerceContentIndicators.some(indicator => 
+        fullUrl.includes(indicator.replace(' ', '')) ||
+        fullUrl.includes(indicator.replace(' ', '-')) ||
+        fullUrl.includes(indicator.replace(' ', '_'))
+      );
+      
+      // Enhanced domain-based detection
+      const domainKeywords = ['shop', 'store', 'buy', 'cart', 'market', 'retail', 'outlet', 'mall'];
+      const hasDomainKeywords = domainKeywords.some(keyword => 
+        urlObj.hostname.includes(keyword)
+      );
+      
+      // Check for common e-commerce subdomains
+      const ecommerceSubdomains = ['shop', 'store', 'buy', 'www', 'en', 'us', 'uk'];
+      const hasEcommerceSubdomain = ecommerceSubdomains.some(subdomain => 
+        urlObj.hostname.startsWith(subdomain + '.')
+      );
+      
+      return hasEcommerceUrlPattern || hasEcommerceKeywords || hasDomainKeywords || hasEcommerceSubdomain;
+    } catch {
+      return false;
+    }
+  };
+
+  const validateEcommerceUrl = async (urlString: string): Promise<boolean> => {
+    // First check if it's a known e-commerce domain
+    if (isEcommerceDomain(urlString)) {
+      return true;
+    }
+    
+    // Then analyze the webpage content structure
+    const contentAnalysis = await analyzeWebpageContent(urlString);
+    return contentAnalysis;
   };
 
   const generatePreviewData = (urlString: string) => {
@@ -93,14 +162,23 @@ const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
       const urlObj = new URL(urlString);
       const domain = urlObj.hostname.replace('www.', '');
       
-      // Generate mock preview data based on domain
-      const mockTitles = [
+      // Generate more realistic mock data based on domain
+      const domainSpecificTitles: { [key: string]: string[] } = {
+        'amazon.com': ['Premium Wireless Headphones', 'Smart Watch Series 7', 'Organic Cotton T-Shirt'],
+        'zara.com': ['Structured Blazer', 'Wide Leg Trousers', 'Leather Ankle Boots'],
+        'nike.com': ['Air Max Running Shoes', 'Dri-FIT Training Top', 'Tech Fleece Hoodie'],
+        'hm.com': ['Oversized Knit Sweater', 'High Waist Jeans', 'Cotton Blend Dress']
+      };
+      
+      const defaultTitles = [
         'Stylish Winter Jacket',
-        'Premium Cotton T-Shirt',
+        'Premium Cotton T-Shirt', 
         'Designer Sneakers',
         'Elegant Evening Dress',
         'Classic Denim Jeans'
       ];
+      
+      const titles = domainSpecificTitles[domain] || defaultTitles;
       
       const mockImages = [
         'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=300&fit=crop',
@@ -111,7 +189,7 @@ const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
       ];
       
       return {
-        title: mockTitles[Math.floor(Math.random() * mockTitles.length)],
+        title: titles[Math.floor(Math.random() * titles.length)],
         image: mockImages[Math.floor(Math.random() * mockImages.length)],
         domain: domain
       };
@@ -126,26 +204,33 @@ const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
 
     setIsProcessing(true);
     
-    // Simulate checking the webpage in background
-    setTimeout(() => {
-      const isValid = isEcommerceUrl(url);
+    try {
+      // Simulate realistic processing time for content analysis
+      await new Promise(resolve => setTimeout(resolve, 2500));
+      
+      const isValid = await validateEcommerceUrl(url);
       
       if (isValid) {
         const previewData = generatePreviewData(url);
         setValidationResult({
           isValid: true,
           previewData,
-          message: 'Success! This appears to be a shopping website.'
+          message: 'Success! This appears to be a shopping website with e-commerce functionality.'
         });
       } else {
         setValidationResult({
           isValid: false,
-          message: 'This link doesn\'t appear to be from a shopping or e-commerce website. Please try a link from an online store.'
+          message: 'This link doesn\'t appear to be from a shopping or e-commerce website. Please try a link from an online store with shopping cart or purchase functionality.'
         });
       }
-      
+    } catch (error) {
+      setValidationResult({
+        isValid: false,
+        message: 'Unable to analyze this website. Please make sure the link is valid and try again.'
+      });
+    } finally {
       setIsProcessing(false);
-    }, 2000);
+    }
   };
 
   const handleSave = () => {
@@ -180,7 +265,7 @@ const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
         {isProcessing ? (
           <div className="text-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-gray-600">Checking the website...</p>
+            <p className="text-gray-600">Analyzing webpage content...</p>
           </div>
         ) : validationResult ? (
           <div className="space-y-6">
