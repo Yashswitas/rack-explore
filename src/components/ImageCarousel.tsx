@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { X, Share, Heart, ShoppingBag, Scissors } from 'lucide-react';
 import { SavedItem } from '../pages/Index';
@@ -47,22 +48,28 @@ const sampleImages = [
 const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const [dismissedItems, setDismissedItems] = useState<string[]>([]);
-  const [savedItems, setSavedItems] = useState<string[]>([]);
+  // Binary state: 0 = unsaved, 1 = saved
+  const [itemSaveStates, setItemSaveStates] = useState<Record<string, 0 | 1>>({});
 
   const handleSave = (item: SavedItem, e: React.MouseEvent) => {
     e.stopPropagation();
     
-    if (savedItems.includes(item.id)) {
-      // Remove from saved items
-      setSavedItems(prev => prev.filter(id => id !== item.id));
-      console.log('Item unsaved:', item);
-    } else {
-      // Add to saved items
-      setSavedItems(prev => [...prev, item.id]);
-      console.log('Item saved:', item);
-    }
+    // Get current state (default to 0 if not set)
+    const currentState = itemSaveStates[item.id] || 0;
     
-    // Always call the parent handler to manage the actual saved items list
+    // Toggle: 0 becomes 1, 1 becomes 0
+    const newState = currentState === 0 ? 1 : 0;
+    
+    // Update the binary state
+    setItemSaveStates(prev => ({
+      ...prev,
+      [item.id]: newState
+    }));
+    
+    console.log(`Item ${item.name} state changed to:`, newState);
+    console.log(newState === 1 ? 'Item saved' : 'Item unsaved');
+    
+    // Call parent handler to manage the actual saved items list
     onSaveItem(item);
   };
 
@@ -137,42 +144,47 @@ const ImageCarousel = ({ onSaveItem }: ImageCarouselProps) => {
     <div className="h-full">
       <div className="overflow-x-scroll overflow-y-hidden scrollbar-hide">
         <div className="flex gap-4 p-4 w-max">
-          {visibleImages.map((item) => (
-            <div key={item.id} className="flex-none w-64 h-full relative group">
-              <img 
-                src={item.image} 
-                alt={item.name}
-                className="w-full h-full object-cover rounded-lg cursor-pointer"
-                onClick={() => setExpandedImage(item.id)}
-              />
-              
-              <div className="absolute top-2 right-2 flex flex-col gap-2">
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleShare();
-                  }}
-                  className="bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-colors"
-                >
-                  <Share className="w-4 h-4 text-black" />
-                </button>
-                <button 
-                  onClick={(e) => handleSave(item, e)}
-                  className="bg-primary p-2 rounded-full shadow-lg hover:bg-primary/90 transition-colors"
-                >
-                  <Heart 
-                    className="w-4 h-4 text-white" 
-                    fill={savedItems.includes(item.id) ? "white" : "none"}
-                  />
-                </button>
+          {visibleImages.map((item) => {
+            // Get current save state (0 or 1)
+            const saveState = itemSaveStates[item.id] || 0;
+            
+            return (
+              <div key={item.id} className="flex-none w-64 h-full relative group">
+                <img 
+                  src={item.image} 
+                  alt={item.name}
+                  className="w-full h-full object-cover rounded-lg cursor-pointer"
+                  onClick={() => setExpandedImage(item.id)}
+                />
+                
+                <div className="absolute top-2 right-2 flex flex-col gap-2">
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleShare();
+                    }}
+                    className="bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-colors"
+                  >
+                    <Share className="w-4 h-4 text-black" />
+                  </button>
+                  <button 
+                    onClick={(e) => handleSave(item, e)}
+                    className="bg-primary p-2 rounded-full shadow-lg hover:bg-primary/90 transition-colors"
+                  >
+                    <Heart 
+                      className="w-4 h-4 text-white" 
+                      fill={saveState === 1 ? "white" : "none"}
+                    />
+                  </button>
+                </div>
+                
+                <div className="absolute bottom-2 left-2 right-2 bg-black/70 backdrop-blur-sm rounded-lg p-2">
+                  <h3 className="font-medium text-white text-sm">{item.name}</h3>
+                  <p className="text-white/80 text-xs">{item.company}</p>
+                </div>
               </div>
-              
-              <div className="absolute bottom-2 left-2 right-2 bg-black/70 backdrop-blur-sm rounded-lg p-2">
-                <h3 className="font-medium text-white text-sm">{item.name}</h3>
-                <p className="text-white/80 text-xs">{item.company}</p>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
