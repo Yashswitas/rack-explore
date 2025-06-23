@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { X, Scissors, Heart } from 'lucide-react';
 import { SavedItem } from '../pages/Index';
@@ -8,14 +7,37 @@ interface AddItemOverlayProps {
   onAddItem: (item: SavedItem) => void;
 }
 
-// Common e-commerce domains for validation
+// Comprehensive e-commerce domains and patterns for validation
 const ecommerceDomains = [
-  'amazon.com', 'amazon.co.uk', 'amazon.ca', 'amazon.de', 'amazon.fr',
-  'ebay.com', 'etsy.com', 'shopify.com', 'woocommerce.com',
-  'zara.com', 'hm.com', 'nike.com', 'adidas.com', 'uniqlo.com',
-  'target.com', 'walmart.com', 'bestbuy.com', 'macys.com',
-  'nordstrom.com', 'sephora.com', 'ulta.com', 'asos.com',
-  'zalando.com', 'shop.', '.shop', 'store.', '.store'
+  // Major marketplaces
+  'amazon.com', 'amazon.co.uk', 'amazon.ca', 'amazon.de', 'amazon.fr', 'amazon.es', 'amazon.it', 'amazon.co.jp',
+  'ebay.com', 'ebay.co.uk', 'ebay.de', 'ebay.fr', 'ebay.it', 'ebay.es',
+  'etsy.com', 'alibaba.com', 'aliexpress.com',
+  
+  // Fashion & clothing
+  'zara.com', 'hm.com', 'nike.com', 'adidas.com', 'uniqlo.com', 'gap.com', 'forever21.com',
+  'asos.com', 'zalando.com', 'boohoo.com', 'prettylittlething.com', 'shein.com', 'yesstyle.com',
+  'nordstrom.com', 'macys.com', 'bloomingdales.com', 'saks.com', 'barneys.com',
+  
+  // Beauty & cosmetics
+  'sephora.com', 'ulta.com', 'beautybay.com', 'lookfantastic.com', 'dermstore.com',
+  
+  // Department stores
+  'target.com', 'walmart.com', 'costco.com', 'bestbuy.com', 'homedepot.com', 'lowes.com',
+  
+  // E-commerce platforms
+  'shopify.com', 'woocommerce.com', 'bigcommerce.com', 'magento.com',
+  
+  // Generic shopping indicators
+  'shop.', '.shop', 'store.', '.store', 'buy.', '.buy', 'cart.', 'checkout.',
+  'ecommerce.', 'webshop.', 'onlinestore.', 'marketplace.', 'retail.'
+];
+
+// Shopping-related keywords that indicate e-commerce functionality
+const ecommerceKeywords = [
+  'shop', 'store', 'buy', 'purchase', 'cart', 'basket', 'checkout', 'payment',
+  'ecommerce', 'e-commerce', 'retail', 'marketplace', 'webshop', 'onlinestore',
+  'wishlist', 'addtocart', 'buynow', 'order', 'product', 'catalog', 'inventory'
 ];
 
 const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
@@ -35,10 +57,32 @@ const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
     try {
       const urlObj = new URL(urlString);
       const hostname = urlObj.hostname.toLowerCase();
+      const pathname = urlObj.pathname.toLowerCase();
+      const fullUrl = urlString.toLowerCase();
       
-      return ecommerceDomains.some(domain => 
-        hostname.includes(domain) || hostname.endsWith(domain)
+      // Check if domain contains any e-commerce domains
+      const domainMatch = ecommerceDomains.some(domain => 
+        hostname.includes(domain) || hostname.endsWith(domain) || hostname.startsWith(domain)
       );
+      
+      // Check if URL contains shopping-related keywords
+      const keywordMatch = ecommerceKeywords.some(keyword => 
+        hostname.includes(keyword) || pathname.includes(keyword) || fullUrl.includes(keyword)
+      );
+      
+      // Check for common e-commerce URL patterns
+      const patternMatch = 
+        pathname.includes('/product/') ||
+        pathname.includes('/item/') ||
+        pathname.includes('/shop/') ||
+        pathname.includes('/store/') ||
+        pathname.includes('/buy/') ||
+        pathname.includes('/p/') ||
+        urlString.includes('product') ||
+        urlString.includes('item') ||
+        urlString.includes('catalog');
+      
+      return domainMatch || keywordMatch || patternMatch;
     } catch {
       return false;
     }
@@ -96,7 +140,7 @@ const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
       } else {
         setValidationResult({
           isValid: false,
-          message: 'This link doesn\'t appear to be from a shopping or e-commerce website.'
+          message: 'This link doesn\'t appear to be from a shopping or e-commerce website. Please try a link from an online store.'
         });
       }
       

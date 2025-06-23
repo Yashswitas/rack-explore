@@ -1,6 +1,5 @@
-
 import { useState } from 'react';
-import { X, ShoppingBag, Camera } from 'lucide-react';
+import { X, ShoppingBag, Save } from 'lucide-react';
 
 interface ItemOverlayProps {
   selectedItem: {
@@ -69,10 +68,10 @@ const ItemOverlay = ({ selectedItem, onClose }: ItemOverlayProps) => {
     secondCategoryName = 'top';
   }
 
-  const handleTryOn = () => {
+  const handleSave = () => {
     if (selectedSecondItem === null) return;
-    console.log('Try-on clicked');
-    alert('Try-on functionality');
+    console.log('Save clicked');
+    alert('Save functionality');
   };
 
   const handleBuyNow = () => {
@@ -139,7 +138,7 @@ const ItemOverlay = ({ selectedItem, onClose }: ItemOverlayProps) => {
 
         <div className="flex gap-3">
           <button 
-            onClick={handleTryOn}
+            onClick={handleSave}
             disabled={selectedSecondItem === null}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-medium transition-all ${
               selectedSecondItem === null 
@@ -147,8 +146,8 @@ const ItemOverlay = ({ selectedItem, onClose }: ItemOverlayProps) => {
                 : 'bg-primary text-white hover:bg-primary/90'
             }`}
           >
-            <Camera className="w-4 h-4" />
-            Try On
+            <Save className="w-4 h-4" />
+            Save
           </button>
           <button 
             onClick={handleBuyNow}
