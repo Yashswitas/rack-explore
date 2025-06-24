@@ -32,7 +32,7 @@ const SavedItemOverlay = ({ selectedItem, onClose, onRemoveItem }: SavedItemOver
         </button>
 
         <div className="mt-8 mb-6">
-          <div className="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-4">
+          <div className="aspect-[3/5] bg-gray-100 rounded-lg overflow-hidden mb-4">
             <img 
               src={selectedItem.image} 
               alt={selectedItem.name}

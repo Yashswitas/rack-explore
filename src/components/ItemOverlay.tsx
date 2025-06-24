@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { X, ShoppingBag, Heart } from 'lucide-react';
 
@@ -48,6 +47,7 @@ const dressesItems = [
 
 const ItemOverlay = ({ selectedItem, onClose, onSaveItem, savedItems = [] }: ItemOverlayProps) => {
   const [selectedSecondItem, setSelectedSecondItem] = useState<number | null>(null);
+  const [highlightedItem, setHighlightedItem] = useState<'first' | 'second'>('first');
   
   // Implement pairing mechanism
   let secondCategoryItems;
@@ -102,6 +102,16 @@ const ItemOverlay = ({ selectedItem, onClose, onSaveItem, savedItems = [] }: Ite
     alert('Buy now functionality');
   };
 
+  const handleFirstItemClick = () => {
+    setHighlightedItem('first');
+  };
+
+  const handleSecondItemClick = () => {
+    if (selectedSecondItem !== null) {
+      setHighlightedItem('second');
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
@@ -127,7 +137,12 @@ const ItemOverlay = ({ selectedItem, onClose, onSaveItem, savedItems = [] }: Ite
         </button>
 
         <div className="grid grid-cols-2 gap-4 mb-4 mt-8">
-          <div className={`aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden ${selectedSecondItem !== null ? 'ring-2 ring-primary' : ''}`}>
+          <div 
+            className={`aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden cursor-pointer ${
+              highlightedItem === 'first' ? 'ring-2 ring-primary' : ''
+            }`}
+            onClick={handleFirstItemClick}
+          >
             <img 
               src={selectedItem.image} 
               alt={selectedItem.name}
@@ -135,7 +150,12 @@ const ItemOverlay = ({ selectedItem, onClose, onSaveItem, savedItems = [] }: Ite
             />
           </div>
           
-          <div className="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden">
+          <div 
+            className={`aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden cursor-pointer ${
+              highlightedItem === 'second' && selectedSecondItem !== null ? 'ring-2 ring-primary' : ''
+            }`}
+            onClick={handleSecondItemClick}
+          >
             {selectedSecondItem !== null ? (
               <img 
                 src={secondCategoryItems[selectedSecondItem].image} 
