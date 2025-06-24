@@ -35,6 +35,10 @@ const Index = () => {
     });
   };
 
+  const handleRemoveItem = (itemId: string) => {
+    setSavedItems(prev => prev.filter(item => item.id !== itemId));
+  };
+
   // Check if any overlay is open
   const isAnyOverlayOpen = showAddOverlay || isItemOverlayOpen || isExpandedViewOpen;
 
@@ -52,7 +56,10 @@ const Index = () => {
           />
         )}
         {activeTab === 'rack' && (
-          <RackTab savedItems={savedItems} />
+          <RackTab 
+            savedItems={savedItems} 
+            onRemoveItem={handleRemoveItem}
+          />
         )}
       </div>
 

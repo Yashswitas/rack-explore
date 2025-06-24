@@ -1,11 +1,24 @@
 
+import { useState } from 'react';
 import { SavedItem } from '../pages/Index';
+import SavedItemOverlay from './SavedItemOverlay';
 
 interface RackTabProps {
   savedItems: SavedItem[];
+  onRemoveItem: (itemId: string) => void;
 }
 
-const RackTab = ({ savedItems }: RackTabProps) => {
+const RackTab = ({ savedItems, onRemoveItem }: RackTabProps) => {
+  const [selectedItem, setSelectedItem] = useState<SavedItem | null>(null);
+
+  const handleItemClick = (item: SavedItem) => {
+    setSelectedItem(item);
+  };
+
+  const handleCloseOverlay = () => {
+    setSelectedItem(null);
+  };
+
   return (
     <div className="h-full flex flex-col">
       {/* Content */}
@@ -21,7 +34,11 @@ const RackTab = ({ savedItems }: RackTabProps) => {
           ) : (
             <div className="grid grid-cols-2 gap-4">
               {savedItems.map((item) => (
-                <div key={item.id} className="bg-white rounded-lg overflow-hidden shadow-sm border">
+                <div 
+                  key={item.id} 
+                  className="bg-white rounded-lg overflow-hidden shadow-sm border cursor-pointer hover:shadow-md transition-shadow"
+                  onClick={() => handleItemClick(item)}
+                >
                   <img 
                     src={item.image} 
                     alt={item.name}
@@ -37,6 +54,14 @@ const RackTab = ({ savedItems }: RackTabProps) => {
           )}
         </div>
       </div>
+
+      {selectedItem && (
+        <SavedItemOverlay 
+          selectedItem={selectedItem}
+          onClose={handleCloseOverlay}
+          onRemoveItem={onRemoveItem}
+        />
+      )}
     </div>
   );
 };

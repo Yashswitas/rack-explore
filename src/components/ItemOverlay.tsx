@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { X, ShoppingBag, Heart } from 'lucide-react';
 
@@ -90,6 +91,12 @@ const ItemOverlay = ({ selectedItem, onClose, onSaveItem, savedItems = [] }: Ite
     onClose();
   };
 
+  const handleCompare = () => {
+    if (selectedSecondItem === null) return;
+    console.log('Compare clicked');
+    alert('Compare functionality');
+  };
+
   const handleBuyNow = () => {
     console.log('Buy now clicked');
     alert('Buy now functionality');
@@ -102,12 +109,24 @@ const ItemOverlay = ({ selectedItem, onClose, onSaveItem, savedItems = [] }: Ite
       <div className="relative bg-white rounded-lg p-6 w-11/12 max-w-md">
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100"
+          className="absolute top-4 left-4 p-1 rounded-full hover:bg-gray-100"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        <button 
+          onClick={handleSave}
+          disabled={selectedSecondItem === null}
+          className={`absolute top-4 right-4 p-2 rounded-full transition-all ${
+            selectedSecondItem === null 
+              ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50' 
+              : 'bg-primary text-white hover:bg-primary/90'
+          }`}
+        >
+          <Heart className="w-4 h-4" fill={selectedSecondItem !== null ? "white" : "none"} />
+        </button>
+
+        <div className="grid grid-cols-2 gap-4 mb-4 mt-8">
           <div className={`aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden ${selectedSecondItem !== null ? 'ring-2 ring-primary' : ''}`}>
             <img 
               src={selectedItem.image} 
@@ -154,16 +173,15 @@ const ItemOverlay = ({ selectedItem, onClose, onSaveItem, savedItems = [] }: Ite
 
         <div className="flex gap-3">
           <button 
-            onClick={handleSave}
+            onClick={handleCompare}
             disabled={selectedSecondItem === null}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-medium transition-all ${
               selectedSecondItem === null 
                 ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50' 
-                : 'bg-primary text-white hover:bg-primary/90'
+                : 'bg-blue-600 text-white hover:bg-blue-700'
             }`}
           >
-            <Heart className="w-4 h-4" />
-            Save
+            Compare
           </button>
           <button 
             onClick={handleBuyNow}
