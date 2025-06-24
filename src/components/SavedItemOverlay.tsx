@@ -23,7 +23,7 @@ const SavedItemOverlay = ({ selectedItem, onClose, onRemoveItem }: SavedItemOver
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
       
-      <div className="relative bg-white rounded-lg p-6 w-11/12 max-w-md">
+      <div className="relative bg-white rounded-lg p-6 w-11/12 max-w-md max-h-[90vh] flex flex-col">
         <button 
           onClick={onClose}
           className="absolute top-4 left-4 p-1 rounded-full hover:bg-gray-100"
@@ -31,8 +31,8 @@ const SavedItemOverlay = ({ selectedItem, onClose, onRemoveItem }: SavedItemOver
           <X className="w-5 h-5" />
         </button>
 
-        <div className="mt-8 mb-6">
-          <div className="aspect-[3/5] bg-gray-100 rounded-lg overflow-hidden mb-4">
+        <div className="mt-8 mb-6 flex-1 flex flex-col items-center">
+          <div className="w-48 h-64 bg-gray-100 rounded-lg overflow-hidden mb-4">
             <img 
               src={selectedItem.image} 
               alt={selectedItem.name}
@@ -46,7 +46,7 @@ const SavedItemOverlay = ({ selectedItem, onClose, onRemoveItem }: SavedItemOver
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 mt-4">
           <button 
             onClick={handleDismiss}
             className="flex-1 flex items-center justify-center gap-2 bg-red-100 text-red-600 py-3 rounded-lg font-medium hover:bg-red-200 transition-colors"

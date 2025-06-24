@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { X, ShoppingBag, Heart } from 'lucide-react';
 
@@ -71,24 +72,34 @@ const ItemOverlay = ({ selectedItem, onClose, onSaveItem, savedItems = [] }: Ite
     secondCategoryName = 'top';
   }
 
-  const handleSave = () => {
-    if (selectedSecondItem === null || !onSaveItem) return;
+  // Check if an item is saved
+  const isItemSaved = (item: any) => {
+    const itemId = `${item.name}-${item.brand}`;
+    return savedItems.some(savedItem => savedItem.id === itemId);
+  };
+
+  // Check if the first item is saved
+  const isFirstItemSaved = isItemSaved(selectedItem);
+
+  // Check if the second item is saved
+  const isSecondItemSaved = selectedSecondItem !== null ? isItemSaved(secondCategoryItems[selectedSecondItem]) : false;
+
+  const handleSaveItem = (item: any, e: React.MouseEvent) => {
+    e.stopPropagation();
     
-    const secondItem = secondCategoryItems[selectedSecondItem];
+    if (!onSaveItem) return;
     
-    // Create outfit object to save
-    const outfit = {
-      id: `outfit-${Date.now()}`,
-      name: `${selectedItem.name} + ${secondItem.name}`,
-      company: `${selectedItem.brand} & ${secondItem.brand}`,
-      image: selectedItem.image, // Use first item's image as primary
-      items: [selectedItem, secondItem],
+    const itemId = `${item.name}-${item.brand}`;
+    const itemToSave = {
+      id: itemId,
+      name: item.name,
+      company: item.brand,
+      image: item.image,
       buyUrl: '#'
     };
     
-    console.log('Saving outfit:', outfit);
-    onSaveItem(outfit);
-    onClose();
+    console.log('Saving item:', itemToSave);
+    onSaveItem(itemToSave);
   };
 
   const handleCompare = () => {
@@ -125,15 +136,23 @@ const ItemOverlay = ({ selectedItem, onClose, onSaveItem, savedItems = [] }: Ite
         </button>
 
         <button 
-          onClick={handleSave}
-          disabled={selectedSecondItem === null}
-          className={`absolute top-4 right-4 p-2 rounded-full transition-all ${
-            selectedSecondItem === null 
-              ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50' 
-              : 'bg-primary text-white hover:bg-primary/90'
-          }`}
+          onClick={(e) => {
+            const currentItem = highlightedItem === 'first' ? selectedItem : 
+              (selectedSecondItem !== null ? secondCategoryItems[selectedSecondItem] : null);
+            if (currentItem) {
+              handleSaveItem(currentItem, e);
+            }
+          }}
+          className="absolute top-4 right-4 p-2 rounded-full bg-white shadow-lg hover:bg-gray-50 transition-colors"
         >
-          <Heart className="w-4 h-4" fill={selectedSecondItem !== null ? "white" : "none"} />
+          <Heart 
+            className="w-4 h-4 text-primary" 
+            fill={
+              highlightedItem === 'first' 
+                ? (isFirstItemSaved ? "currentColor" : "none")
+                : (isSecondItemSaved ? "currentColor" : "none")
+            }
+          />
         </button>
 
         <div className="grid grid-cols-2 gap-4 mb-4 mt-8">
