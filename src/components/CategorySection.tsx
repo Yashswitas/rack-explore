@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import ItemOverlay from './ItemOverlay';
 
@@ -90,9 +91,11 @@ const categories = [
 
 interface CategorySectionProps {
   onOverlayChange: (isOpen: boolean) => void;
+  onSaveItem?: (item: any) => void;
+  savedItems?: any[];
 }
 
-const CategorySection = ({ onOverlayChange }: CategorySectionProps) => {
+const CategorySection = ({ onOverlayChange, onSaveItem, savedItems }: CategorySectionProps) => {
   const [selectedItem, setSelectedItem] = useState<{
     name: string;
     brand: string;
@@ -144,6 +147,8 @@ const CategorySection = ({ onOverlayChange }: CategorySectionProps) => {
         <ItemOverlay 
           selectedItem={selectedItem}
           onClose={handleCloseOverlay}
+          onSaveItem={onSaveItem}
+          savedItems={savedItems}
         />
       )}
     </div>

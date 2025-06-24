@@ -1,5 +1,6 @@
+
 import { useState } from 'react';
-import { X, Share, Heart, ShoppingBag, Scissors } from 'lucide-react';
+import { X, Share, Heart, ShoppingBag } from 'lucide-react';
 import { SavedItem } from '../pages/Index';
 
 interface ImageCarouselProps {
@@ -113,7 +114,7 @@ const ImageCarousel = ({ onSaveItem, savedItems }: ImageCarouselProps) => {
               onClick={(e) => handleDismiss(item.id, e)}
               className="flex-1 flex items-center justify-center gap-2 bg-red-100 text-red-600 py-3 rounded-lg font-medium"
             >
-              <Scissors className="w-4 h-4" />
+              <X className="w-4 h-4" />
               Dismiss
             </button>
             <button 

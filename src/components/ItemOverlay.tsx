@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { X, ShoppingBag, Heart } from 'lucide-react';
 
@@ -10,6 +9,8 @@ interface ItemOverlayProps {
     category: string;
   };
   onClose: () => void;
+  onSaveItem?: (item: any) => void;
+  savedItems?: any[];
 }
 
 const bottomsItems = [
@@ -44,7 +45,7 @@ const dressesItems = [
   { name: 'Wrap Dress', brand: 'Mango', image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=200&h=250&fit=crop' },
 ];
 
-const ItemOverlay = ({ selectedItem, onClose }: ItemOverlayProps) => {
+const ItemOverlay = ({ selectedItem, onClose, onSaveItem, savedItems = [] }: ItemOverlayProps) => {
   const [selectedSecondItem, setSelectedSecondItem] = useState<number | null>(null);
   
   // Implement pairing mechanism
@@ -70,9 +71,23 @@ const ItemOverlay = ({ selectedItem, onClose }: ItemOverlayProps) => {
   }
 
   const handleSave = () => {
-    if (selectedSecondItem === null) return;
-    console.log('Save clicked');
-    alert('Save functionality');
+    if (selectedSecondItem === null || !onSaveItem) return;
+    
+    const secondItem = secondCategoryItems[selectedSecondItem];
+    
+    // Create outfit object to save
+    const outfit = {
+      id: `outfit-${Date.now()}`,
+      name: `${selectedItem.name} + ${secondItem.name}`,
+      company: `${selectedItem.brand} & ${secondItem.brand}`,
+      image: selectedItem.image, // Use first item's image as primary
+      items: [selectedItem, secondItem],
+      buyUrl: '#'
+    };
+    
+    console.log('Saving outfit:', outfit);
+    onSaveItem(outfit);
+    onClose();
   };
 
   const handleBuyNow = () => {
@@ -139,13 +154,6 @@ const ItemOverlay = ({ selectedItem, onClose }: ItemOverlayProps) => {
 
         <div className="flex gap-3">
           <button 
-            onClick={onClose}
-            className="flex-1 flex items-center justify-center gap-2 bg-red-100 text-red-600 py-3 rounded-lg font-medium hover:bg-red-200 transition-colors"
-          >
-            <X className="w-4 h-4" />
-            Dismiss
-          </button>
-          <button 
             onClick={handleSave}
             disabled={selectedSecondItem === null}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-medium transition-all ${
@@ -156,6 +164,18 @@ const ItemOverlay = ({ selectedItem, onClose }: ItemOverlayProps) => {
           >
             <Heart className="w-4 h-4" />
             Save
+          </button>
+          <button 
+            onClick={handleBuyNow}
+            disabled={selectedSecondItem === null}
+            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-medium transition-all ${
+              selectedSecondItem === null 
+                ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50' 
+                : 'bg-green-600 text-white hover:bg-green-700'
+            }`}
+          >
+            <ShoppingBag className="w-4 h-4" />
+            Buy Now
           </button>
         </div>
       </div>

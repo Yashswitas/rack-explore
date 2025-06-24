@@ -39,7 +39,11 @@ const ExploreTab = ({ onSaveItem, savedItems, onOverlayChange, onExpandedViewCha
         <ImageCarousel onSaveItem={onSaveItem} savedItems={savedItems} />
       </div>
       <div className="h-1/2 overflow-y-auto bg-gray-50">
-        <CategorySection onOverlayChange={handleOverlayChange} />
+        <CategorySection 
+          onOverlayChange={handleOverlayChange}
+          onSaveItem={onSaveItem}
+          savedItems={savedItems}
+        />
       </div>
     </div>
   );
