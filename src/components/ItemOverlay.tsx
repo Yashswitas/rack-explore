@@ -1,5 +1,6 @@
+
 import { useState } from 'react';
-import { X, ShoppingBag, Save } from 'lucide-react';
+import { X, ShoppingBag, Heart } from 'lucide-react';
 
 interface ItemOverlayProps {
   selectedItem: {
@@ -92,7 +93,7 @@ const ItemOverlay = ({ selectedItem, onClose }: ItemOverlayProps) => {
         </button>
 
         <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden">
+          <div className={`aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden ${selectedSecondItem !== null ? 'ring-2 ring-primary' : ''}`}>
             <img 
               src={selectedItem.image} 
               alt={selectedItem.name}
@@ -138,6 +139,13 @@ const ItemOverlay = ({ selectedItem, onClose }: ItemOverlayProps) => {
 
         <div className="flex gap-3">
           <button 
+            onClick={onClose}
+            className="flex-1 flex items-center justify-center gap-2 bg-red-100 text-red-600 py-3 rounded-lg font-medium hover:bg-red-200 transition-colors"
+          >
+            <X className="w-4 h-4" />
+            Dismiss
+          </button>
+          <button 
             onClick={handleSave}
             disabled={selectedSecondItem === null}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-medium transition-all ${
@@ -146,15 +154,8 @@ const ItemOverlay = ({ selectedItem, onClose }: ItemOverlayProps) => {
                 : 'bg-primary text-white hover:bg-primary/90'
             }`}
           >
-            <Save className="w-4 h-4" />
+            <Heart className="w-4 h-4" />
             Save
-          </button>
-          <button 
-            onClick={handleBuyNow}
-            className="flex-1 flex items-center justify-center gap-2 bg-gray-100 text-black py-3 rounded-lg font-medium hover:bg-gray-200"
-          >
-            <ShoppingBag className="w-4 h-4" />
-            Buy Now
           </button>
         </div>
       </div>
