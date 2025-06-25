@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Heart, Share, ShoppingBag } from 'lucide-react';
+import { Heart, Share, ShoppingBag, X } from 'lucide-react';
 import { SavedItem } from '../pages/Index';
 
 interface CreatedLookProps {
@@ -11,6 +11,7 @@ interface CreatedLookProps {
 
 const CreatedLook = ({ items, onSaveItem, savedItems }: CreatedLookProps) => {
   const [item1, item2] = items;
+  const [expandedImage, setExpandedImage] = useState<any | null>(null);
   
   // Determine layout based on categories
   const isTopBottom = (item1.category === 'top' && item2.category === 'bottom') || 
@@ -57,6 +58,17 @@ const CreatedLook = ({ items, onSaveItem, savedItems }: CreatedLookProps) => {
     alert(`Share functionality for ${item.name}`);
   };
 
+  const handleBuy = () => {
+    console.log('Buy button clicked');
+    alert('Opening in browser..');
+  };
+
+  const handleDismiss = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setExpandedImage(null);
+    console.log('Created look dismissed');
+  };
+
   const getItemHeight = (item: any) => {
     if (isTopBottom) return '50%';
     if (isDressShoe) {
@@ -65,9 +77,86 @@ const CreatedLook = ({ items, onSaveItem, savedItems }: CreatedLookProps) => {
     return '50%';
   };
 
+  // Expanded view for created looks
+  if (expandedImage) {
+    return (
+      <div className="fixed inset-0 bg-black z-50 flex flex-col">
+        <button 
+          onClick={() => setExpandedImage(null)}
+          className="absolute top-4 left-4 z-10 bg-white/20 backdrop-blur-sm rounded-full p-2"
+        >
+          <X className="w-6 h-6 text-white" />
+        </button>
+        
+        <div className="flex-1 flex items-center justify-center overflow-hidden p-4">
+          <div className="w-full max-w-md h-full max-h-96 bg-white rounded-lg overflow-hidden">
+            {/* Top Item in expanded view */}
+            <div 
+              className="relative overflow-hidden"
+              style={{ height: getItemHeight(topItem) }}
+            >
+              <img 
+                src={topItem.image} 
+                alt={topItem.name}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute bottom-1 left-1 right-1 bg-black/70 backdrop-blur-sm rounded p-1">
+                <h4 className="font-medium text-white text-xs truncate">{topItem.name}</h4>
+                <p className="text-white/80 text-xs truncate">{topItem.brand}</p>
+              </div>
+            </div>
+
+            {/* Bottom Item in expanded view */}
+            <div 
+              className="relative overflow-hidden"
+              style={{ height: getItemHeight(bottomItem) }}
+            >
+              <img 
+                src={bottomItem.image} 
+                alt={bottomItem.name}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute bottom-1 left-1 right-1 bg-black/70 backdrop-blur-sm rounded p-1">
+                <h4 className="font-medium text-white text-xs truncate">{bottomItem.name}</h4>
+                <p className="text-white/80 text-xs truncate">{bottomItem.brand}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="bg-white p-6">
+          <div className="mb-4">
+            <h3 className="font-semibold text-lg text-black">Created Look</h3>
+            <p className="text-gray-600">{topItem.brand} & {bottomItem.brand}</p>
+          </div>
+          
+          <div className="flex gap-4">
+            <button 
+              onClick={handleDismiss}
+              className="flex-1 flex items-center justify-center gap-2 bg-red-100 text-red-600 py-3 rounded-lg font-medium"
+            >
+              <X className="w-4 h-4" />
+              Dismiss
+            </button>
+            <button 
+              onClick={handleBuy}
+              className="flex-1 flex items-center justify-center gap-2 bg-green-600 text-white py-3 rounded-lg font-medium"
+            >
+              <ShoppingBag className="w-4 h-4" />
+              Buy Now
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex-none w-64 relative group" style={{ height: '50%' }}>
-      <div className="w-full h-full rounded-lg overflow-hidden relative">
+      <div 
+        className="w-full h-full rounded-lg overflow-hidden relative cursor-pointer"
+        onClick={() => setExpandedImage(true)}
+      >
         {/* Top Item */}
         <div 
           className="relative overflow-hidden"

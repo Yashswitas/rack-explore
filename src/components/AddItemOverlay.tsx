@@ -1,5 +1,6 @@
+
 import { useState } from 'react';
-import { X, Scissors, Heart } from 'lucide-react';
+import { X, Heart } from 'lucide-react';
 import { SavedItem } from '../pages/Index';
 
 interface AddItemOverlayProps {
@@ -271,7 +272,7 @@ const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
           <div className="space-y-6">
             <div className={`p-4 rounded-lg ${validationResult.isValid ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
               <p className={`font-medium ${validationResult.isValid ? 'text-green-800' : 'text-red-800'}`}>
-                {validationResult.message}
+                {validationResult.isValid ? 'Great! This is a valid shopping link.' : 'This doesn\'t appear to be from a shopping website.'}
               </p>
             </div>
 
@@ -298,7 +299,7 @@ const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
                 onClick={handleDismiss}
                 className="flex-1 flex items-center justify-center gap-2 bg-red-100 text-red-600 py-3 rounded-lg font-medium hover:bg-red-200 transition-colors"
               >
-                <Scissors className="w-4 h-4" />
+                <X className="w-4 h-4" />
                 Dismiss
               </button>
               {validationResult.isValid && (
