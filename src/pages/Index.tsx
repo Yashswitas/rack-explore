@@ -20,6 +20,7 @@ const Index = () => {
   const [showAddOverlay, setShowAddOverlay] = useState(false);
   const [isItemOverlayOpen, setIsItemOverlayOpen] = useState(false);
   const [isExpandedViewOpen, setIsExpandedViewOpen] = useState(false);
+  const [createdLooks, setCreatedLooks] = useState<any[][]>([]);
 
   const handleSaveItem = (item: SavedItem) => {
     setSavedItems(prev => {
@@ -39,6 +40,11 @@ const Index = () => {
     setSavedItems(prev => prev.filter(item => item.id !== itemId));
   };
 
+  const handleCreateLook = (items: any[]) => {
+    setCreatedLooks(prev => [...prev, items]);
+    console.log('Look created with items:', items);
+  };
+
   // Check if any overlay is open
   const isAnyOverlayOpen = showAddOverlay || isItemOverlayOpen || isExpandedViewOpen;
 
@@ -53,6 +59,8 @@ const Index = () => {
             savedItems={savedItems}
             onOverlayChange={setIsItemOverlayOpen}
             onExpandedViewChange={setIsExpandedViewOpen}
+            createdLooks={createdLooks}
+            onCreateLook={handleCreateLook}
           />
         )}
         {activeTab === 'rack' && (

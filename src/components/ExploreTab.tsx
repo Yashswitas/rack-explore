@@ -1,5 +1,4 @@
 
-import { useState } from 'react';
 import ImageCarousel from './ImageCarousel';
 import CategorySection from './CategorySection';
 import { SavedItem } from '../pages/Index';
@@ -9,20 +8,20 @@ interface ExploreTabProps {
   savedItems: SavedItem[];
   onOverlayChange?: (isOpen: boolean) => void;
   onExpandedViewChange?: (isOpen: boolean) => void;
+  createdLooks: any[][];
+  onCreateLook: (items: any[]) => void;
 }
 
-const ExploreTab = ({ onSaveItem, savedItems, onOverlayChange, onExpandedViewChange }: ExploreTabProps) => {
-  const [isItemOverlayOpen, setIsItemOverlayOpen] = useState(false);
-  const [createdLooks, setCreatedLooks] = useState<any[][]>([]);
-
+const ExploreTab = ({ 
+  onSaveItem, 
+  savedItems, 
+  onOverlayChange, 
+  onExpandedViewChange,
+  createdLooks,
+  onCreateLook 
+}: ExploreTabProps) => {
   const handleOverlayChange = (isOpen: boolean) => {
-    setIsItemOverlayOpen(isOpen);
     onOverlayChange?.(isOpen);
-  };
-
-  const handleCreateLook = (items: any[]) => {
-    setCreatedLooks(prev => [...prev, items]);
-    console.log('Look created with items:', items);
   };
 
   return (
@@ -49,7 +48,7 @@ const ExploreTab = ({ onSaveItem, savedItems, onOverlayChange, onExpandedViewCha
             onOverlayChange={handleOverlayChange}
             onSaveItem={onSaveItem}
             savedItems={savedItems}
-            onCreateLook={handleCreateLook}
+            onCreateLook={onCreateLook}
           />
         </div>
       </div>
