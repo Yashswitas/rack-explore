@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import ItemOverlay from './ItemOverlay';
 
@@ -67,7 +66,7 @@ const categories = [
     ]
   },
   {
-    name: 'Shoes',
+    name: 'Shoe',
     items: [
       { name: 'White Sneakers', brand: 'Adidas', image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=200&h=250&fit=crop' },
       { name: 'Black Ankle Boots', brand: 'Dr. Martens', image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5e?w=200&h=250&fit=crop' },
@@ -93,9 +92,10 @@ interface CategorySectionProps {
   onOverlayChange: (isOpen: boolean) => void;
   onSaveItem?: (item: any) => void;
   savedItems?: any[];
+  onCreateLook?: (items: any[]) => void;
 }
 
-const CategorySection = ({ onOverlayChange, onSaveItem, savedItems }: CategorySectionProps) => {
+const CategorySection = ({ onOverlayChange, onSaveItem, savedItems, onCreateLook }: CategorySectionProps) => {
   const [selectedItem, setSelectedItem] = useState<{
     name: string;
     brand: string;
@@ -149,6 +149,7 @@ const CategorySection = ({ onOverlayChange, onSaveItem, savedItems }: CategorySe
           onClose={handleCloseOverlay}
           onSaveItem={onSaveItem}
           savedItems={savedItems}
+          onCreateLook={onCreateLook}
         />
       )}
     </div>

@@ -13,10 +13,16 @@ interface ExploreTabProps {
 
 const ExploreTab = ({ onSaveItem, savedItems, onOverlayChange, onExpandedViewChange }: ExploreTabProps) => {
   const [isItemOverlayOpen, setIsItemOverlayOpen] = useState(false);
+  const [createdLooks, setCreatedLooks] = useState<any[][]>([]);
 
   const handleOverlayChange = (isOpen: boolean) => {
     setIsItemOverlayOpen(isOpen);
     onOverlayChange?.(isOpen);
+  };
+
+  const handleCreateLook = (items: any[]) => {
+    setCreatedLooks(prev => [...prev, items]);
+    console.log('Look created with items:', items);
   };
 
   // Monitor for expanded view state changes from ImageCarousel
@@ -36,13 +42,18 @@ const ExploreTab = ({ onSaveItem, savedItems, onOverlayChange, onExpandedViewCha
   return (
     <div className="h-full flex flex-col">
       <div className="h-1/2">
-        <ImageCarousel onSaveItem={onSaveItem} savedItems={savedItems} />
+        <ImageCarousel 
+          onSaveItem={onSaveItem} 
+          savedItems={savedItems}
+          createdLooks={createdLooks}
+        />
       </div>
       <div className="h-1/2 overflow-y-auto bg-gray-50">
         <CategorySection 
           onOverlayChange={handleOverlayChange}
           onSaveItem={onSaveItem}
           savedItems={savedItems}
+          onCreateLook={handleCreateLook}
         />
       </div>
     </div>

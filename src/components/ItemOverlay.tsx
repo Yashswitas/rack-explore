@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { X, ShoppingBag, Heart } from 'lucide-react';
+import { X, ShoppingBag, Heart, Sparkles } from 'lucide-react';
 
 interface ItemOverlayProps {
   selectedItem: {
@@ -12,6 +12,7 @@ interface ItemOverlayProps {
   onClose: () => void;
   onSaveItem?: (item: any) => void;
   savedItems?: any[];
+  onCreateLook?: (items: any[]) => void;
 }
 
 const bottomsItems = [
@@ -46,7 +47,7 @@ const dressesItems = [
   { name: 'Wrap Dress', brand: 'Mango', image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=200&h=250&fit=crop' },
 ];
 
-const ItemOverlay = ({ selectedItem, onClose, onSaveItem, savedItems = [] }: ItemOverlayProps) => {
+const ItemOverlay = ({ selectedItem, onClose, onSaveItem, savedItems = [], onCreateLook }: ItemOverlayProps) => {
   const [selectedSecondItem, setSelectedSecondItem] = useState<number | null>(null);
   const [highlightedItem, setHighlightedItem] = useState<'first' | 'second'>('first');
   
@@ -62,8 +63,8 @@ const ItemOverlay = ({ selectedItem, onClose, onSaveItem, savedItems = [] }: Ite
     secondCategoryName = 'top';
   } else if (selectedItem.category === 'dress') {
     secondCategoryItems = shoesItems;
-    secondCategoryName = 'shoes';
-  } else if (selectedItem.category === 'shoes') {
+    secondCategoryName = 'shoe';
+  } else if (selectedItem.category === 'shoe') {
     secondCategoryItems = dressesItems;
     secondCategoryName = 'dress';
   } else {
@@ -102,15 +103,25 @@ const ItemOverlay = ({ selectedItem, onClose, onSaveItem, savedItems = [] }: Ite
     onSaveItem(itemToSave);
   };
 
-  const handleCompare = () => {
-    if (selectedSecondItem === null) return;
-    console.log('Compare clicked');
-    alert('Compare functionality');
+  const handleCreateLook = () => {
+    if (selectedSecondItem === null || !onCreateLook) return;
+    
+    const secondItem = secondCategoryItems[selectedSecondItem];
+    const lookItems = [selectedItem, secondItem];
+    
+    console.log('Creating look with items:', lookItems);
+    onCreateLook(lookItems);
+    onClose();
   };
 
   const handleBuyNow = () => {
-    console.log('Buy now clicked');
-    alert('Buy now functionality');
+    const currentItem = highlightedItem === 'first' ? selectedItem : 
+      (selectedSecondItem !== null ? secondCategoryItems[selectedSecondItem] : null);
+    
+    if (currentItem) {
+      console.log('Buy now clicked for:', currentItem.name);
+      alert(`Buy now functionality for ${currentItem.name}`);
+    }
   };
 
   const handleFirstItemClick = () => {
@@ -212,24 +223,20 @@ const ItemOverlay = ({ selectedItem, onClose, onSaveItem, savedItems = [] }: Ite
 
         <div className="flex gap-3">
           <button 
-            onClick={handleCompare}
+            onClick={handleCreateLook}
             disabled={selectedSecondItem === null}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-medium transition-all ${
               selectedSecondItem === null 
                 ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50' 
-                : 'bg-blue-600 text-white hover:bg-blue-700'
+                : 'bg-primary text-white hover:bg-primary/90'
             }`}
           >
-            Compare
+            <Sparkles className="w-4 h-4" />
+            Create look
           </button>
           <button 
             onClick={handleBuyNow}
-            disabled={selectedSecondItem === null}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-medium transition-all ${
-              selectedSecondItem === null 
-                ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50' 
-                : 'bg-green-600 text-white hover:bg-green-700'
-            }`}
+            className="flex-1 flex items-center justify-center gap-2 bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition-colors"
           >
             <ShoppingBag className="w-4 h-4" />
             Buy Now

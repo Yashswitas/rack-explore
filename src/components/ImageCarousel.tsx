@@ -2,10 +2,12 @@
 import { useState } from 'react';
 import { X, Share, Heart, ShoppingBag } from 'lucide-react';
 import { SavedItem } from '../pages/Index';
+import CreatedLook from './CreatedLook';
 
 interface ImageCarouselProps {
   onSaveItem: (item: SavedItem) => void;
   savedItems: SavedItem[];
+  createdLooks?: any[][];
 }
 
 const sampleImages = [
@@ -46,7 +48,7 @@ const sampleImages = [
   }
 ];
 
-const ImageCarousel = ({ onSaveItem, savedItems }: ImageCarouselProps) => {
+const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [] }: ImageCarouselProps) => {
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const [dismissedItems, setDismissedItems] = useState<string[]>([]);
 
@@ -81,6 +83,9 @@ const ImageCarousel = ({ onSaveItem, savedItems }: ImageCarouselProps) => {
   };
 
   const visibleImages = sampleImages.filter(item => !dismissedItems.includes(item.id));
+  
+  // Combine regular images and created looks
+  const allItems = [...visibleImages, ...createdLooks];
 
   if (expandedImage) {
     const item = sampleImages.find(img => img.id === expandedImage);
@@ -119,7 +124,7 @@ const ImageCarousel = ({ onSaveItem, savedItems }: ImageCarouselProps) => {
             </button>
             <button 
               onClick={handleBuy}
-              className="flex-1 flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-lg font-medium"
+              className="flex-1 flex items-center justify-center gap-2 bg-green-600 text-white py-3 rounded-lg font-medium"
             >
               <ShoppingBag className="w-4 h-4" />
               Buy Now
@@ -134,8 +139,20 @@ const ImageCarousel = ({ onSaveItem, savedItems }: ImageCarouselProps) => {
     <div className="h-full">
       <div className="overflow-x-scroll overflow-y-hidden scrollbar-hide">
         <div className="flex gap-4 p-4 w-max">
-          {visibleImages.map((item) => {
-            // Check if item is saved by looking at the savedItems array
+          {allItems.map((item, index) => {
+            // Handle created looks (arrays of items)
+            if (Array.isArray(item)) {
+              return (
+                <CreatedLook
+                  key={`look-${index}`}
+                  items={item}
+                  onSaveItem={onSaveItem}
+                  savedItems={savedItems}
+                />
+              );
+            }
+            
+            // Handle regular items
             const isItemSaved = savedItems.some(savedItem => savedItem.id === item.id);
             
             return (
