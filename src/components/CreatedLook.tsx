@@ -66,7 +66,7 @@ const CreatedLook = ({ items, onSaveItem, savedItems }: CreatedLookProps) => {
   };
 
   return (
-    <div className="flex-none w-64 h-full relative group">
+    <div className="flex-none w-64 relative group" style={{ height: '50%' }}>
       <div className="w-full h-full rounded-lg overflow-hidden relative">
         {/* Top Item */}
         <div 

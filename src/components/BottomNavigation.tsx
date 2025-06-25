@@ -11,12 +11,12 @@ const BottomNavigation = ({ activeTab, onTabChange, onAddClick }: BottomNavigati
   return (
     <div className="bg-white border-t border-gray-200 flex items-center relative py-2">
       <button 
-        onClick={() => onTabChange('explore')}
+        onClick={() => onTabChange('home')}
         className={`flex-1 py-3 text-center font-medium ${
-          activeTab === 'explore' ? 'text-primary' : 'text-gray-600'
+          activeTab === 'home' ? 'text-primary' : 'text-gray-600'
         }`}
       >
-        Explore
+        Home
       </button>
       
       <div className="flex-none px-6">

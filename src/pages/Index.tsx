@@ -15,7 +15,7 @@ export interface SavedItem {
 }
 
 const Index = () => {
-  const [activeTab, setActiveTab] = useState('explore');
+  const [activeTab, setActiveTab] = useState('home');
   const [savedItems, setSavedItems] = useState<SavedItem[]>([]);
   const [showAddOverlay, setShowAddOverlay] = useState(false);
   const [isItemOverlayOpen, setIsItemOverlayOpen] = useState(false);
@@ -47,7 +47,7 @@ const Index = () => {
       <Header />
       
       <div className="flex-1 overflow-hidden pb-16">
-        {activeTab === 'explore' && (
+        {activeTab === 'home' && (
           <ExploreTab 
             onSaveItem={handleSaveItem} 
             savedItems={savedItems}
