@@ -8,6 +8,7 @@ interface ImageCarouselProps {
   onSaveItem: (item: SavedItem) => void;
   savedItems: SavedItem[];
   createdLooks?: any[][];
+  onExpandedViewChange?: (isOpen: boolean) => void;
 }
 
 const sampleImages = [
@@ -48,7 +49,7 @@ const sampleImages = [
   }
 ];
 
-const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [] }: ImageCarouselProps) => {
+const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [], onExpandedViewChange }: ImageCarouselProps) => {
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const [dismissedItems, setDismissedItems] = useState<string[]>([]);
 
@@ -82,6 +83,16 @@ const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [] }: ImageCarou
     console.log('Item dismissed:', itemId);
   };
 
+  const handleExpand = (itemId: string) => {
+    setExpandedImage(itemId);
+    onExpandedViewChange?.(true);
+  };
+
+  const handleCloseExpanded = () => {
+    setExpandedImage(null);
+    onExpandedViewChange?.(false);
+  };
+
   const visibleImages = sampleImages.filter(item => !dismissedItems.includes(item.id));
   
   // Combine regular images and created looks
@@ -94,7 +105,7 @@ const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [] }: ImageCarou
     return (
       <div className="fixed inset-0 bg-black z-50 flex flex-col">
         <button 
-          onClick={() => setExpandedImage(null)}
+          onClick={handleCloseExpanded}
           className="absolute top-4 left-4 z-10 bg-white/20 backdrop-blur-sm rounded-full p-2"
         >
           <X className="w-6 h-6 text-white" />
@@ -137,8 +148,8 @@ const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [] }: ImageCarou
 
   return (
     <div className="h-full">
-      <div className="overflow-x-scroll overflow-y-hidden scrollbar-hide">
-        <div className="flex gap-4 p-4 w-max">
+      <div className="overflow-x-scroll overflow-y-hidden scrollbar-hide h-full">
+        <div className="flex gap-4 p-4 w-max h-full">
           {allItems.map((item, index) => {
             // Handle created looks (arrays of items)
             if (Array.isArray(item)) {
@@ -148,6 +159,7 @@ const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [] }: ImageCarou
                   items={item}
                   onSaveItem={onSaveItem}
                   savedItems={savedItems}
+                  onExpandedViewChange={onExpandedViewChange}
                 />
               );
             }
@@ -161,7 +173,7 @@ const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [] }: ImageCarou
                   src={item.image} 
                   alt={item.name}
                   className="w-full h-full object-cover rounded-lg cursor-pointer"
-                  onClick={() => setExpandedImage(item.id)}
+                  onClick={() => handleExpand(item.id)}
                 />
                 
                 <div className="absolute top-2 right-2 flex flex-col gap-2">

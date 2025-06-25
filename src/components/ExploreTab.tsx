@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ImageCarousel from './ImageCarousel';
 import CategorySection from './CategorySection';
 import { SavedItem } from '../pages/Index';
@@ -15,24 +15,6 @@ const ExploreTab = ({ onSaveItem, savedItems, onOverlayChange, onExpandedViewCha
   const [isItemOverlayOpen, setIsItemOverlayOpen] = useState(false);
   const [createdLooks, setCreatedLooks] = useState<any[][]>([]);
 
-  // Load created looks from localStorage on component mount
-  useEffect(() => {
-    const savedLooks = localStorage.getItem('createdLooks');
-    if (savedLooks) {
-      try {
-        const parsedLooks = JSON.parse(savedLooks);
-        setCreatedLooks(parsedLooks);
-      } catch (error) {
-        console.error('Error loading created looks:', error);
-      }
-    }
-  }, []);
-
-  // Save created looks to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('createdLooks', JSON.stringify(createdLooks));
-  }, [createdLooks]);
-
   const handleOverlayChange = (isOpen: boolean) => {
     setIsItemOverlayOpen(isOpen);
     onOverlayChange?.(isOpen);
@@ -42,20 +24,6 @@ const ExploreTab = ({ onSaveItem, savedItems, onOverlayChange, onExpandedViewCha
     setCreatedLooks(prev => [...prev, items]);
     console.log('Look created with items:', items);
   };
-
-  // Monitor for expanded view state changes from ImageCarousel
-  useEffect(() => {
-    const checkExpandedView = () => {
-      const expandedView = document.querySelector('.fixed.inset-0.bg-black.z-50');
-      const isExpanded = !!expandedView;
-      onExpandedViewChange?.(isExpanded);
-    };
-
-    const observer = new MutationObserver(checkExpandedView);
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    return () => observer.disconnect();
-  }, [onExpandedViewChange]);
 
   return (
     <div className="h-full flex flex-col">
@@ -68,6 +36,7 @@ const ExploreTab = ({ onSaveItem, savedItems, onOverlayChange, onExpandedViewCha
             onSaveItem={onSaveItem} 
             savedItems={savedItems}
             createdLooks={createdLooks}
+            onExpandedViewChange={onExpandedViewChange}
           />
         </div>
       </div>

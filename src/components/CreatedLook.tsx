@@ -7,11 +7,12 @@ interface CreatedLookProps {
   items: any[];
   onSaveItem: (item: SavedItem) => void;
   savedItems: SavedItem[];
+  onExpandedViewChange?: (isOpen: boolean) => void;
 }
 
-const CreatedLook = ({ items, onSaveItem, savedItems }: CreatedLookProps) => {
+const CreatedLook = ({ items, onSaveItem, savedItems, onExpandedViewChange }: CreatedLookProps) => {
   const [item1, item2] = items;
-  const [expandedImage, setExpandedImage] = useState<any | null>(null);
+  const [expandedImage, setExpandedImage] = useState<boolean>(false);
   
   // Determine layout based on categories
   const isTopBottom = (item1.category === 'top' && item2.category === 'bottom') || 
@@ -63,9 +64,20 @@ const CreatedLook = ({ items, onSaveItem, savedItems }: CreatedLookProps) => {
     alert('Opening in browser..');
   };
 
+  const handleExpand = () => {
+    setExpandedImage(true);
+    onExpandedViewChange?.(true);
+  };
+
+  const handleCloseExpanded = () => {
+    setExpandedImage(false);
+    onExpandedViewChange?.(false);
+  };
+
   const handleDismiss = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setExpandedImage(null);
+    setExpandedImage(false);
+    onExpandedViewChange?.(false);
     console.log('Created look dismissed');
   };
 
@@ -82,7 +94,7 @@ const CreatedLook = ({ items, onSaveItem, savedItems }: CreatedLookProps) => {
     return (
       <div className="fixed inset-0 bg-black z-50 flex flex-col">
         <button 
-          onClick={() => setExpandedImage(null)}
+          onClick={handleCloseExpanded}
           className="absolute top-4 left-4 z-10 bg-white/20 backdrop-blur-sm rounded-full p-2"
         >
           <X className="w-6 h-6 text-white" />
@@ -152,10 +164,10 @@ const CreatedLook = ({ items, onSaveItem, savedItems }: CreatedLookProps) => {
   }
 
   return (
-    <div className="flex-none w-64 relative group" style={{ height: '50%' }}>
+    <div className="flex-none w-64 h-full relative group">
       <div 
         className="w-full h-full rounded-lg overflow-hidden relative cursor-pointer"
-        onClick={() => setExpandedImage(true)}
+        onClick={handleExpand}
       >
         {/* Top Item */}
         <div 
