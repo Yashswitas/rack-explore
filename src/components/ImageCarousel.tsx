@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { X, Share, Heart, ShoppingBag, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SavedItem } from '../pages/Index';
@@ -59,16 +58,27 @@ const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [], onExpandedVi
   const checkScrollButtons = () => {
     if (scrollContainerRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft + clientWidth < scrollWidth);
+      console.log('Scroll check:', { scrollLeft, scrollWidth, clientWidth });
+      setCanScrollLeft(scrollLeft > 10); // Add small threshold to avoid edge cases
+      setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 10); // Add small threshold
     }
   };
 
   useEffect(() => {
-    checkScrollButtons();
-    const handleResize = () => checkScrollButtons();
+    // Add a delay to ensure DOM is fully rendered
+    const timer = setTimeout(() => {
+      checkScrollButtons();
+    }, 100);
+    
+    const handleResize = () => {
+      setTimeout(checkScrollButtons, 100);
+    };
+    
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timer);
+    };
   }, [createdLooks, dismissedItems]);
 
   const scrollLeft = () => {
