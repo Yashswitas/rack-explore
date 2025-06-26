@@ -24,6 +24,9 @@ const ExploreTab = ({
     onOverlayChange?.(isOpen);
   };
 
+  // Filter saved items that have categories (these are added items)
+  const addedItems = savedItems.filter(item => 'category' in item);
+
   return (
     <div className="h-full flex flex-col">
       <div className="h-1/2 flex flex-col">
@@ -49,6 +52,7 @@ const ExploreTab = ({
             onSaveItem={onSaveItem}
             savedItems={savedItems}
             onCreateLook={onCreateLook}
+            addedItems={addedItems}
           />
         </div>
       </div>

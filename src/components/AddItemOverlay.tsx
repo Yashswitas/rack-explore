@@ -1,11 +1,10 @@
-
 import { useState } from 'react';
 import { X, Heart } from 'lucide-react';
 import { SavedItem } from '../pages/Index';
 
 interface AddItemOverlayProps {
   onClose: () => void;
-  onAddItem: (item: SavedItem) => void;
+  onAddItem: (item: SavedItem & { category?: string }) => void;
 }
 
 // Comprehensive e-commerce domains including marketplaces and platforms
@@ -31,7 +30,7 @@ const ecommerceDomains = [
   
   // E-commerce platforms and solutions
   'shopify.com', 'woocommerce.com', 'bigcommerce.com', 'magento.com', 'squarespace.com', 'wix.com',
-  'etsy.com', 'esty.com', 'bonanza.com', 'mercari.com', 'poshmark.com', 'depop.com', 'vinted.com',
+  'etsy.com', 'etsy.com', 'bonanza.com', 'mercari.com', 'poshmark.com', 'depop.com', 'vinted.com',
   
   // Regional and specialized marketplaces
   'shopee.com', 'lazada.com', 'tokopedia.com', 'bukalapak.com', 'qoo10.com', 'gmarket.co.kr',
@@ -80,6 +79,8 @@ const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
       title: string;
       image: string;
       domain: string;
+      category: string;
+      description: string;
     };
     message: string;
   } | null>(null);
@@ -158,6 +159,46 @@ const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
     return contentAnalysis;
   };
 
+  const categorizeItem = (title: string, url: string): string => {
+    const titleLower = title.toLowerCase();
+    const urlLower = url.toLowerCase();
+    
+    // Top category keywords
+    const topKeywords = ['shirt', 't-shirt', 'tee', 'blouse', 'top', 'tank', 'crop', 'hoodie', 'sweater', 'cardigan', 'blazer', 'jacket', 'vest', 'polo', 'turtleneck'];
+    
+    // Bottom category keywords
+    const bottomKeywords = ['jeans', 'pants', 'trousers', 'shorts', 'skirt', 'leggings', 'chinos', 'culottes', 'palazzo', 'cargo'];
+    
+    // Dress category keywords
+    const dressKeywords = ['dress', 'gown', 'frock', 'sundress', 'maxi', 'midi', 'mini dress', 'cocktail', 'evening'];
+    
+    // Shoe category keywords
+    const shoeKeywords = ['shoes', 'sneakers', 'boots', 'heels', 'flats', 'sandals', 'loafers', 'pumps', 'mules', 'oxfords', 'espadrilles', 'wedges'];
+    
+    // Check for dress first (most specific)
+    if (dressKeywords.some(keyword => titleLower.includes(keyword) || urlLower.includes(keyword))) {
+      return 'dress';
+    }
+    
+    // Check for shoes
+    if (shoeKeywords.some(keyword => titleLower.includes(keyword) || urlLower.includes(keyword))) {
+      return 'shoe';
+    }
+    
+    // Check for tops
+    if (topKeywords.some(keyword => titleLower.includes(keyword) || urlLower.includes(keyword))) {
+      return 'top';
+    }
+    
+    // Check for bottoms
+    if (bottomKeywords.some(keyword => titleLower.includes(keyword) || urlLower.includes(keyword))) {
+      return 'bottom';
+    }
+    
+    // Default to top if no category is detected
+    return 'top';
+  };
+
   const generatePreviewData = (urlString: string) => {
     try {
       const urlObj = new URL(urlString);
@@ -180,6 +221,7 @@ const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
       ];
       
       const titles = domainSpecificTitles[domain] || defaultTitles;
+      const selectedTitle = titles[Math.floor(Math.random() * titles.length)];
       
       const mockImages = [
         'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=300&fit=crop',
@@ -189,10 +231,14 @@ const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
         'https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=300&fit=crop'
       ];
       
+      const category = categorizeItem(selectedTitle, urlString);
+      
       return {
-        title: titles[Math.floor(Math.random() * titles.length)],
+        title: selectedTitle,
         image: mockImages[Math.floor(Math.random() * mockImages.length)],
-        domain: domain
+        domain: domain,
+        category: category,
+        description: `Premium quality ${selectedTitle.toLowerCase()} from ${domain}`
       };
     } catch {
       return null;
@@ -236,12 +282,13 @@ const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
 
   const handleSave = () => {
     if (validationResult?.isValid && validationResult.previewData) {
-      const newItem: SavedItem = {
+      const newItem: SavedItem & { category?: string } = {
         id: Date.now().toString(),
         name: validationResult.previewData.title,
         company: validationResult.previewData.domain,
         image: validationResult.previewData.image,
-        buyUrl: url
+        buyUrl: url,
+        category: validationResult.previewData.category
       };
       onAddItem(newItem);
       onClose();
@@ -288,6 +335,7 @@ const AddItemOverlay = ({ onClose, onAddItem }: AddItemOverlayProps) => {
                   <div className="flex-1">
                     <h5 className="font-medium text-gray-900">{validationResult.previewData.title}</h5>
                     <p className="text-sm text-gray-600">{validationResult.previewData.domain}</p>
+                    <p className="text-xs text-gray-500 mt-1">Category: {validationResult.previewData.category}</p>
                     <p className="text-xs text-gray-500 mt-1 break-all">{url}</p>
                   </div>
                 </div>

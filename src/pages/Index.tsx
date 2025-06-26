@@ -22,7 +22,7 @@ const Index = () => {
   const [isExpandedViewOpen, setIsExpandedViewOpen] = useState(false);
   const [createdLooks, setCreatedLooks] = useState<any[][]>([]);
 
-  const handleSaveItem = (item: SavedItem) => {
+  const handleSaveItem = (item: SavedItem | (SavedItem & { category?: string })) => {
     setSavedItems(prev => {
       // Check if item already exists
       const existingIndex = prev.findIndex(savedItem => savedItem.id === item.id);

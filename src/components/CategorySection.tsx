@@ -1,7 +1,8 @@
+
 import { useState } from 'react';
 import ItemOverlay from './ItemOverlay';
 
-const categories = [
+const initialCategories = [
   {
     name: 'Top',
     items: [
@@ -93,15 +94,49 @@ interface CategorySectionProps {
   onSaveItem?: (item: any) => void;
   savedItems?: any[];
   onCreateLook?: (items: any[]) => void;
+  addedItems?: any[];
 }
 
-const CategorySection = ({ onOverlayChange, onSaveItem, savedItems, onCreateLook }: CategorySectionProps) => {
+const CategorySection = ({ onOverlayChange, onSaveItem, savedItems, onCreateLook, addedItems = [] }: CategorySectionProps) => {
   const [selectedItem, setSelectedItem] = useState<{
     name: string;
     brand: string;
     image: string;
     category: string;
   } | null>(null);
+
+  // Merge initial categories with added items
+  const getCategoriesWithAddedItems = () => {
+    const categoriesMap = new Map();
+    
+    // Start with initial categories
+    initialCategories.forEach(category => {
+      categoriesMap.set(category.name.toLowerCase(), {
+        name: category.name,
+        items: [...category.items]
+      });
+    });
+    
+    // Add items from addedItems to appropriate categories
+    addedItems.forEach(item => {
+      if (item.category) {
+        const categoryKey = item.category.toLowerCase();
+        const categoryData = categoriesMap.get(categoryKey);
+        
+        if (categoryData) {
+          categoryData.items.push({
+            name: item.name,
+            brand: item.company,
+            image: item.image
+          });
+        }
+      }
+    });
+    
+    return Array.from(categoriesMap.values());
+  };
+
+  const categories = getCategoriesWithAddedItems();
 
   const handleItemClick = (item: any, categoryName: string) => {
     setSelectedItem({

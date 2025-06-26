@@ -1,6 +1,5 @@
-
-import { useState } from 'react';
-import { X, Share, Heart, ShoppingBag } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { X, Share, Heart, ShoppingBag, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SavedItem } from '../pages/Index';
 import CreatedLook from './CreatedLook';
 
@@ -52,6 +51,36 @@ const sampleImages = [
 const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [], onExpandedViewChange }: ImageCarouselProps) => {
   const [expandedImage, setExpandedImage] = useState<string | null>(null);
   const [dismissedItems, setDismissedItems] = useState<string[]>([]);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const checkScrollButtons = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft + clientWidth < scrollWidth);
+    }
+  };
+
+  useEffect(() => {
+    checkScrollButtons();
+    const handleResize = () => checkScrollButtons();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [createdLooks, dismissedItems]);
+
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  };
 
   const handleSave = (item: SavedItem, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -147,9 +176,35 @@ const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [], onExpandedVi
   }
 
   return (
-    <div className="h-full">
-      <div className="overflow-x-scroll overflow-y-hidden scrollbar-hide h-full">
-        <div className="flex gap-4 p-4 w-max h-full">
+    <div className="h-full relative">
+      {/* Left scroll button */}
+      {canScrollLeft && (
+        <button
+          onClick={scrollLeft}
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-all duration-200 opacity-0 hover:opacity-100 group-hover:opacity-100"
+          onMouseEnter={() => {}}
+        >
+          <ChevronLeft className="w-5 h-5 text-black" />
+        </button>
+      )}
+
+      {/* Right scroll button */}
+      {canScrollRight && (
+        <button
+          onClick={scrollRight}
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-all duration-200 opacity-0 hover:opacity-100 group-hover:opacity-100"
+          onMouseEnter={() => {}}
+        >
+          <ChevronRight className="w-5 h-5 text-black" />
+        </button>
+      )}
+
+      <div className="overflow-x-scroll overflow-y-hidden scrollbar-hide h-full group">
+        <div 
+          ref={scrollContainerRef}
+          className="flex gap-4 p-4 w-max h-full"
+          onScroll={checkScrollButtons}
+        >
           {allItems.map((item, index) => {
             // Handle created looks (arrays of items)
             if (Array.isArray(item)) {
