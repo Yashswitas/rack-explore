@@ -181,8 +181,7 @@ const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [], onExpandedVi
       {canScrollLeft && (
         <button
           onClick={scrollLeft}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-all duration-200 opacity-0 hover:opacity-100 group-hover:opacity-100"
-          onMouseEnter={() => {}}
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-all duration-200"
         >
           <ChevronLeft className="w-5 h-5 text-black" />
         </button>
@@ -192,8 +191,7 @@ const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [], onExpandedVi
       {canScrollRight && (
         <button
           onClick={scrollRight}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-all duration-200 opacity-0 hover:opacity-100 group-hover:opacity-100"
-          onMouseEnter={() => {}}
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-all duration-200"
         >
           <ChevronRight className="w-5 h-5 text-black" />
         </button>
