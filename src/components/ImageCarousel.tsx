@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { X, Share, Heart, ShoppingBag, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SavedItem } from '../pages/Index';
@@ -59,25 +60,32 @@ const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [], onExpandedVi
     if (scrollContainerRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
       console.log('Scroll check:', { scrollLeft, scrollWidth, clientWidth });
-      setCanScrollLeft(scrollLeft > 10); // Add small threshold to avoid edge cases
-      setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 10); // Add small threshold
+      
+      // Check if we can scroll left (not at the beginning)
+      setCanScrollLeft(scrollLeft > 5);
+      
+      // Check if we can scroll right (not at the end)
+      setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 5);
     }
   };
 
   useEffect(() => {
-    // Add a delay to ensure DOM is fully rendered
-    const timer = setTimeout(() => {
-      checkScrollButtons();
-    }, 100);
+    // Use requestAnimationFrame to ensure DOM is rendered
+    const checkAfterRender = () => {
+      requestAnimationFrame(() => {
+        checkScrollButtons();
+      });
+    };
+    
+    checkAfterRender();
     
     const handleResize = () => {
-      setTimeout(checkScrollButtons, 100);
+      checkAfterRender();
     };
     
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
-      clearTimeout(timer);
     };
   }, [createdLooks, dismissedItems]);
 
@@ -188,7 +196,7 @@ const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [], onExpandedVi
 
   return (
     <div className="h-full relative">
-      {/* Left scroll button - always visible but with different opacity */}
+      {/* Left scroll button */}
       <button
         onClick={scrollLeft}
         className={`absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg transition-all duration-200 ${
@@ -201,7 +209,7 @@ const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [], onExpandedVi
         <ChevronLeft className="w-5 h-5 text-black" />
       </button>
 
-      {/* Right scroll button - always visible but with different opacity */}
+      {/* Right scroll button */}
       <button
         onClick={scrollRight}
         className={`absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg transition-all duration-200 ${
@@ -214,10 +222,11 @@ const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [], onExpandedVi
         <ChevronRight className="w-5 h-5 text-black" />
       </button>
 
-      <div className="overflow-x-scroll overflow-y-hidden scrollbar-hide h-full group">
+      <div className="h-full overflow-x-auto overflow-y-hidden">
         <div 
           ref={scrollContainerRef}
-          className="flex gap-4 p-4 w-max h-full"
+          className="flex gap-4 p-4 h-full"
+          style={{ width: 'max-content' }}
           onScroll={checkScrollButtons}
         >
           {allItems.map((item, index) => {
