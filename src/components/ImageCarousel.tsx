@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { X, Share, Heart, ShoppingBag, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SavedItem } from '../pages/Index';
@@ -177,25 +178,31 @@ const ImageCarousel = ({ onSaveItem, savedItems, createdLooks = [], onExpandedVi
 
   return (
     <div className="h-full relative">
-      {/* Left scroll button */}
-      {canScrollLeft && (
-        <button
-          onClick={scrollLeft}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-all duration-200"
-        >
-          <ChevronLeft className="w-5 h-5 text-black" />
-        </button>
-      )}
+      {/* Left scroll button - always visible but with different opacity */}
+      <button
+        onClick={scrollLeft}
+        className={`absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg transition-all duration-200 ${
+          canScrollLeft 
+            ? 'opacity-100 hover:bg-white cursor-pointer' 
+            : 'opacity-30 cursor-not-allowed'
+        }`}
+        disabled={!canScrollLeft}
+      >
+        <ChevronLeft className="w-5 h-5 text-black" />
+      </button>
 
-      {/* Right scroll button */}
-      {canScrollRight && (
-        <button
-          onClick={scrollRight}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-all duration-200"
-        >
-          <ChevronRight className="w-5 h-5 text-black" />
-        </button>
-      )}
+      {/* Right scroll button - always visible but with different opacity */}
+      <button
+        onClick={scrollRight}
+        className={`absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg transition-all duration-200 ${
+          canScrollRight 
+            ? 'opacity-100 hover:bg-white cursor-pointer' 
+            : 'opacity-30 cursor-not-allowed'
+        }`}
+        disabled={!canScrollRight}
+      >
+        <ChevronRight className="w-5 h-5 text-black" />
+      </button>
 
       <div className="overflow-x-scroll overflow-y-hidden scrollbar-hide h-full group">
         <div 
